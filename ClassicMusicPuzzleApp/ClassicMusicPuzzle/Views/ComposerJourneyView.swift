@@ -103,12 +103,16 @@ private struct ComposerHeaderView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .firstTextBaseline) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(composer.name)
-                        .font(.title2.weight(.bold))
-                    Text("\(composer.years) - \(composer.country)")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                HStack(alignment: .center, spacing: 14) {
+                    ComposerPortraitView(composer: composer)
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(composer.name)
+                            .font(.title2.weight(.bold))
+                        Text("\(composer.years) - \(composer.country)")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
                 }
                 Spacer()
                 Text(composer.famousWork)
@@ -145,5 +149,23 @@ private struct ComposerHeaderView: View {
         }
         .padding(20)
         .background(.ultraThinMaterial)
+    }
+}
+
+private struct ComposerPortraitView: View {
+    let composer: Composer
+
+    var body: some View {
+        Image(composer.portraitAssetName)
+            .resizable()
+            .scaledToFill()
+            .frame(width: 78, height: 78)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .overlay {
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(.white.opacity(0.78), lineWidth: 2)
+            }
+            .shadow(color: composer.color.opacity(0.32), radius: 10, y: 4)
+            .accessibilityLabel(Text("\(composer.name) portrait"))
     }
 }
