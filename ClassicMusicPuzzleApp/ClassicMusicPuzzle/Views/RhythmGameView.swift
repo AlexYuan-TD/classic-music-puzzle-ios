@@ -2,9 +2,6 @@ import SwiftUI
 
 struct RhythmGameView: View {
     let composer: Composer
-    let level: Int
-    let onReplay: () -> Void
-    let onNext: () -> Void
 
     @State private var taps = 0
     @State private var pulse = false
@@ -12,14 +9,14 @@ struct RhythmGameView: View {
     @State private var feedback = "Follow the staff and tap the piano keys"
     @State private var expectedKeyIndex = 0
 
-    private var targetTaps: Int { [12, 18, 24][level - 1] }
-    private var speed: Double { [7.0, 5.5, 4.2][level - 1] }
+    private let targetTaps = 12
+    private let speed = 5.4
     private let keys = PianoKey.playableKeys
 
     var body: some View {
         VStack(spacing: 18) {
             HStack {
-                Text("Level \(level) - Follow the rhythm")
+                Text("Follow the staff")
                     .font(.headline)
                 Spacer()
                 Text("\(min(taps, targetTaps))/\(targetTaps)")
@@ -71,7 +68,10 @@ struct RhythmGameView: View {
             }
 
             if completed {
-                CompletionBar(onStay: {}, onReplay: reset, onNext: next)
+                Text("Great! Swipe left or right to meet another composer.")
+                    .font(.callout.weight(.semibold))
+                    .foregroundStyle(composer.color)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             } else {
                 ProgressView(value: Double(taps), total: Double(targetTaps))
                     .tint(composer.color)
@@ -79,9 +79,6 @@ struct RhythmGameView: View {
         }
         .padding(20)
         .onChange(of: composer) { _, _ in
-            reset()
-        }
-        .onChange(of: level) { _, _ in
             reset()
         }
     }
@@ -118,12 +115,6 @@ struct RhythmGameView: View {
         completed = false
         feedback = "Follow the staff and tap the piano keys"
         expectedKeyIndex = 0
-        onReplay()
-    }
-
-    private func next() {
-        reset()
-        onNext()
     }
 }
 
@@ -209,7 +200,7 @@ private struct PianoKeyboardView: View {
                         VStack(spacing: 5) {
                             ZStack {
                                 if key == expectedKey {
-                                    MusicPetView(color: composer.color)
+                                    DinoPetView(color: composer.color)
                                         .matchedGeometryEffect(id: "music-pet", in: petNamespace)
                                         .transition(.scale.combined(with: .opacity))
                                 }
@@ -242,19 +233,29 @@ private struct PianoKeyboardView: View {
     }
 }
 
-private struct MusicPetView: View {
+private struct DinoPetView: View {
     let color: Color
 
     var body: some View {
         ZStack {
-            Circle()
+            RoundedRectangle(cornerRadius: 10)
                 .fill(color)
-                .frame(width: 28, height: 28)
+                .frame(width: 34, height: 26)
+                .overlay(alignment: .top) {
+                    HStack(spacing: 4) {
+                        ForEach(0..<3, id: \.self) { _ in
+                            Triangle()
+                                .fill(color.opacity(0.92))
+                                .frame(width: 8, height: 7)
+                        }
+                    }
+                    .offset(y: -6)
+                }
 
             Circle()
                 .fill(.white.opacity(0.92))
                 .frame(width: 5, height: 5)
-                .offset(x: -5, y: -3)
+                .offset(x: -7, y: -3)
 
             Circle()
                 .fill(.white.opacity(0.92))
@@ -263,16 +264,27 @@ private struct MusicPetView: View {
 
             Capsule()
                 .fill(.white.opacity(0.88))
-                .frame(width: 11, height: 3)
-                .offset(y: 7)
+                .frame(width: 12, height: 3)
+                .offset(x: -1, y: 7)
 
             Text("♪")
                 .font(.system(size: 14, weight: .bold))
                 .foregroundStyle(.white)
-                .offset(x: 18, y: -16)
+                .offset(x: 22, y: -18)
         }
         .shadow(color: color.opacity(0.34), radius: 8, y: 4)
         .accessibilityHidden(true)
+    }
+}
+
+private struct Triangle: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.midX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+        path.closeSubpath()
+        return path
     }
 }
 
@@ -291,28 +303,4 @@ private struct PianoKey: Identifiable, Equatable {
         PianoKey(id: "a", name: "A", isSharp: false, staffPosition: 1),
         PianoKey(id: "b", name: "B", isSharp: false, staffPosition: 2)
     ]
-}
-
-private struct CompletionBar: View {
-    let onStay: () -> Void
-    let onReplay: () -> Void
-    let onNext: () -> Void
-
-    var body: some View {
-        VStack(spacing: 10) {
-            Text("Beautifully done. Stay with the music, replay, or continue.")
-                .font(.callout.weight(.medium))
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-            HStack {
-                Button("Stay", action: onStay)
-                    .buttonStyle(.bordered)
-                Button("Replay", action: onReplay)
-                    .buttonStyle(.bordered)
-                Button("Next Level", action: onNext)
-                    .buttonStyle(.borderedProminent)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-    }
 }

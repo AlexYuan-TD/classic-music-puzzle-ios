@@ -3,7 +3,6 @@ import SwiftUI
 struct ComposerJourneyView: View {
     @StateObject private var player = ThemePlayer()
     @State private var composerIndex = 0
-    @State private var level = 0
     private var composer: Composer { Composer.catalog[composerIndex] }
 
     var body: some View {
@@ -15,13 +14,20 @@ struct ComposerJourneyView: View {
                     ComposerHeaderView(composer: composer)
 
                     RhythmGameView(
-                        composer: composer,
-                        level: level + 1,
-                        onReplay: replay,
-                        onNext: nextLevel
+                        composer: composer
                     )
                 }
             }
+            .gesture(
+                DragGesture(minimumDistance: 40)
+                    .onEnded { value in
+                        if value.translation.width < -60 {
+                            moveComposer(by: 1)
+                        } else if value.translation.width > 60 {
+                            moveComposer(by: -1)
+                        }
+                    }
+            )
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button(player.isPlaying ? "Pause" : "Play") {
@@ -33,7 +39,6 @@ struct ComposerJourneyView: View {
                         ForEach(Array(Composer.catalog.enumerated()), id: \.element.id) { index, item in
                             Button(item.name) {
                                 composerIndex = index
-                                replay()
                                 player.play(theme: item.theme)
                             }
                         }
@@ -49,18 +54,10 @@ struct ComposerJourneyView: View {
         }
     }
 
-    private func replay() {
-        level = max(0, level)
-    }
-
-    private func nextLevel() {
-        if level < 2 {
-            level += 1
-        } else {
-            level = 0
-            composerIndex = (composerIndex + 1) % Composer.catalog.count
-            player.play(theme: composer.theme)
-        }
+    private func moveComposer(by offset: Int) {
+        let count = Composer.catalog.count
+        composerIndex = (composerIndex + offset + count) % count
+        player.play(theme: composer.theme)
     }
 }
 
