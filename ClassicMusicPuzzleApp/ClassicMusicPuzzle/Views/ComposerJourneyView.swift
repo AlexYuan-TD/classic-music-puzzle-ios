@@ -10,12 +10,16 @@ struct ComposerJourneyView: View {
             ZStack {
                 PortraitBackgroundView(composer: composer)
 
-                VStack(spacing: 0) {
-                    ComposerHeaderView(composer: composer)
+                ScrollView {
+                    VStack(spacing: 0) {
+                        ComposerHeaderView(composer: composer)
 
-                    RhythmGameView(
-                        composer: composer
-                    )
+                        RhythmGameView(
+                            composer: composer
+                        )
+
+                        ReflectionNoteView(composer: composer)
+                    }
                 }
             }
             .gesture(
@@ -120,15 +124,26 @@ private struct ComposerHeaderView: View {
                 .foregroundStyle(.primary)
 
             Text(composer.inspiration)
-                .font(.system(size: 24, weight: .bold, design: .serif))
-                .lineSpacing(4)
-                .foregroundStyle(.primary)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 12)
+                .font(.system(size: 30, weight: .heavy, design: .serif))
+                .italic()
+                .lineSpacing(6)
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [composer.color, .primary],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .padding(.horizontal, 18)
+                .padding(.vertical, 16)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(composer.color.opacity(0.14))
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(.white.opacity(0.58))
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(composer.color.opacity(0.10))
+                    }
                 )
                 .overlay(alignment: .leading) {
                     Rectangle()
@@ -138,6 +153,46 @@ private struct ComposerHeaderView: View {
                         .padding(.vertical, 10)
                 }
                 .padding(.top, 6)
+        }
+        .padding(20)
+        .background(.ultraThinMaterial)
+    }
+}
+
+private struct ReflectionNoteView: View {
+    let composer: Composer
+    @AppStorage private var note: String
+
+    init(composer: Composer) {
+        self.composer = composer
+        _note = AppStorage(wrappedValue: "", "reflection.\(composer.id)")
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("听到这段音乐，你想到了什么？")
+                .font(.headline)
+
+            TextEditor(text: $note)
+                .frame(minHeight: 108)
+                .padding(10)
+                .scrollContentBackground(.hidden)
+                .background(.white.opacity(0.66))
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(composer.color.opacity(0.22), lineWidth: 1)
+                }
+                .overlay(alignment: .topLeading) {
+                    if note.isEmpty {
+                        Text("写下一个画面、回忆、颜色或心情...")
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 18)
+                            .allowsHitTesting(false)
+                    }
+                }
         }
         .padding(20)
         .background(.ultraThinMaterial)

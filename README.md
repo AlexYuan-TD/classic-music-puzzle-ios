@@ -8,6 +8,7 @@ Free iOS app for introducing classical composers through short inspiring message
 - No ads, no accounts, no analytics, no tracking, and no in-app purchases.
 - Composer pages include a short introduction, one inspiring message, a portrait, and a famous public-domain theme.
 - A cute little dinosaur sits on the correct piano key and moves to the next key after each correct tap.
+- Users can write a private reflection about what the music made them imagine or feel.
 - Users swipe left or right to move to the previous or next composer page.
 - On rhythm completion the app encourages the user to swipe to another composer.
 - Music playback uses synthesized note data instead of bundled recordings to avoid separate recording rights.
