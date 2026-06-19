@@ -1,13 +1,13 @@
 # Classic Music Rhythm
 
-Free iOS app for introducing classical composers through short inspiring messages, famous public-domain musical themes, and a rhythm-tap game with flowing staff notation.
+Free iOS app for introducing classical composers through short inspiring messages, famous public-domain musical themes, and a piano-key rhythm game with flowing staff notation.
 
 ## Product Shape
 
 - Native SwiftUI iOS app.
 - No ads, no accounts, no analytics, no tracking, and no in-app purchases.
 - Composer pages include a short introduction, one inspiring message, a portrait, and a famous public-domain theme.
-- Rhythm levels progress from easy to hard with more taps and faster flowing staff notes.
+- Rhythm levels progress from easy to hard with more key taps and faster flowing staff notes.
 - On rhythm completion the user can stay, replay, or go to the next level.
 - Music playback uses synthesized note data instead of bundled recordings to avoid separate recording rights.
 

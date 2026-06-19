@@ -9,10 +9,12 @@ struct RhythmGameView: View {
     @State private var taps = 0
     @State private var pulse = false
     @State private var completed = false
-    @State private var feedback = "Tap the screen with the rhythm"
+    @State private var feedback = "Follow the staff and tap the piano keys"
+    @State private var expectedKeyIndex = 0
 
     private var targetTaps: Int { [12, 18, 24][level - 1] }
     private var speed: Double { [7.0, 5.5, 4.2][level - 1] }
+    private let keys = PianoKey.playableKeys
 
     var body: some View {
         VStack(spacing: 18) {
@@ -25,11 +27,14 @@ struct RhythmGameView: View {
                     .foregroundStyle(composer.color)
             }
 
-            Button {
-                registerTap()
-            } label: {
+            VStack(spacing: 12) {
                 ZStack {
-                    FlowingStaffView(composer: composer, speed: speed, pulse: pulse)
+                    FlowingStaffView(
+                        composer: composer,
+                        speed: speed,
+                        pulse: pulse,
+                        highlightedKey: keys[expectedKeyIndex]
+                    )
 
                     VStack(spacing: 12) {
                         Text(feedback)
@@ -37,7 +42,7 @@ struct RhythmGameView: View {
                             .multilineTextAlignment(.center)
                             .foregroundStyle(.primary)
 
-                        Text("Listen to \(composer.theme.title), then tap with the beat.")
+                        Text("Listen to \(composer.theme.title), watch the note, then choose the matching key.")
                             .font(.footnote.weight(.medium))
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
@@ -56,9 +61,14 @@ struct RhythmGameView: View {
                     RoundedRectangle(cornerRadius: 8)
                         .stroke(composer.color.opacity(0.22), lineWidth: 1)
                 }
+
+                PianoKeyboardView(
+                    composer: composer,
+                    keys: keys,
+                    expectedKey: keys[expectedKeyIndex],
+                    onKeyTap: registerTap
+                )
             }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Tap with the rhythm")
 
             if completed {
                 CompletionBar(onStay: {}, onReplay: reset, onNext: next)
@@ -76,31 +86,38 @@ struct RhythmGameView: View {
         }
     }
 
-    private func registerTap() {
+    private func registerTap(_ key: PianoKey) {
         guard !completed else { return }
-        taps += 1
         pulse.toggle()
-        feedback = tapFeedback
+
+        if key == keys[expectedKeyIndex] {
+            taps += 1
+            feedback = tapFeedback(for: key)
+            expectedKeyIndex = (expectedKeyIndex + 1) % keys.count
+        } else {
+            feedback = "Listen again. Try \(keys[expectedKeyIndex].name)."
+        }
 
         if taps >= targetTaps {
             completed = true
-            feedback = "You caught the rhythm."
+            feedback = "You followed the melody."
         }
     }
 
-    private var tapFeedback: String {
+    private func tapFeedback(for key: PianoKey) -> String {
         switch taps % 4 {
-        case 1: return "Strong beat"
-        case 2: return "Keep flowing"
-        case 3: return "Listen forward"
-        default: return "Beautiful timing"
+        case 1: return "\(key.name) - clear tone"
+        case 2: return "\(key.name) - keep flowing"
+        case 3: return "\(key.name) - listen forward"
+        default: return "\(key.name) - beautiful timing"
         }
     }
 
     private func reset() {
         taps = 0
         completed = false
-        feedback = "Tap the screen with the rhythm"
+        feedback = "Follow the staff and tap the piano keys"
+        expectedKeyIndex = 0
         onReplay()
     }
 
@@ -114,6 +131,7 @@ private struct FlowingStaffView: View {
     let composer: Composer
     let speed: Double
     let pulse: Bool
+    let highlightedKey: PianoKey
 
     var body: some View {
         TimelineView(.animation) { timeline in
@@ -134,7 +152,8 @@ private struct FlowingStaffView: View {
 
                 for index in 0..<14 {
                     let x = size.width - CGFloat(index) * 92 + offset
-                    let y = staffTop + CGFloat((index * 2 + Int(speed)) % 5) * spacing
+                    let keyOffset = (highlightedKey.staffPosition + index * 2) % 5
+                    let y = staffTop + CGFloat(keyOffset) * spacing
                     let rect = CGRect(x: x, y: y - 12, width: 24, height: 18)
                     context.fill(Path(ellipseIn: rect), with: .color(composer.color.opacity(0.84)))
 
@@ -166,6 +185,66 @@ private struct FlowingStaffView: View {
             )
         )
     }
+}
+
+private struct PianoKeyboardView: View {
+    let composer: Composer
+    let keys: [PianoKey]
+    let expectedKey: PianoKey
+    let onKeyTap: (PianoKey) -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Piano keys")
+                .font(.caption.weight(.bold))
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 4) {
+                ForEach(keys) { key in
+                    Button {
+                        onKeyTap(key)
+                    } label: {
+                        VStack(spacing: 5) {
+                            Text(key.name)
+                                .font(.caption.weight(.bold))
+                            Circle()
+                                .fill(key == expectedKey ? composer.color : Color.clear)
+                                .frame(width: 7, height: 7)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: key.isSharp ? 82 : 104)
+                        .foregroundStyle(key.isSharp ? .white : .primary)
+                        .background(key.isSharp ? Color.black : Color.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 7))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 7)
+                                .stroke(key == expectedKey ? composer.color : Color.black.opacity(0.12), lineWidth: key == expectedKey ? 2 : 1)
+                        }
+                        .shadow(color: key == expectedKey ? composer.color.opacity(0.26) : .black.opacity(0.08), radius: 5, y: 2)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Piano key \(key.name)")
+                }
+            }
+        }
+    }
+}
+
+private struct PianoKey: Identifiable, Equatable {
+    let id: String
+    let name: String
+    let isSharp: Bool
+    let staffPosition: Int
+
+    static let playableKeys = [
+        PianoKey(id: "c", name: "C", isSharp: false, staffPosition: 4),
+        PianoKey(id: "d", name: "D", isSharp: false, staffPosition: 3),
+        PianoKey(id: "e", name: "E", isSharp: false, staffPosition: 2),
+        PianoKey(id: "f", name: "F", isSharp: false, staffPosition: 1),
+        PianoKey(id: "g", name: "G", isSharp: false, staffPosition: 0),
+        PianoKey(id: "a", name: "A", isSharp: false, staffPosition: 1),
+        PianoKey(id: "b", name: "B", isSharp: false, staffPosition: 2)
+    ]
 }
 
 private struct CompletionBar: View {
