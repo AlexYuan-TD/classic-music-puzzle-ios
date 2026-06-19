@@ -4,6 +4,7 @@ Use this checklist before App Store Connect submission.
 
 ## App Review Readiness
 
+- Enroll in the Apple Developer Program. See `docs/apple-developer-account.md`.
 - Test the app on a real device and current iOS simulator.
 - Confirm there are no crashes, placeholder screens, broken links, or unfinished content.
 - Publish the support/privacy/audit page on `https://jamesyyy.com/classic-music-journey/`.
