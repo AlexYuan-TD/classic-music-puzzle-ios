@@ -10,6 +10,7 @@ struct Composer: Identifiable, Equatable {
     let inspiration: String
     let famousWork: String
     let color: Color
+    let portraitAssetName: String
     let theme: MusicalTheme
 }
 
@@ -35,6 +36,7 @@ extension Composer {
             inspiration: "Begin again with courage. Even silence can become music.",
             famousWork: "Symphony No. 5",
             color: Color(red: 0.72, green: 0.16, blue: 0.15),
+            portraitAssetName: "PortraitBeethoven",
             theme: MusicalTheme(
                 title: "Symphony No. 5 motif",
                 tempo: 112,
@@ -55,6 +57,7 @@ extension Composer {
             inspiration: "Let lightness be serious. Joy can be a discipline.",
             famousWork: "Eine kleine Nachtmusik",
             color: Color(red: 0.10, green: 0.42, blue: 0.66),
+            portraitAssetName: "PortraitMozart",
             theme: MusicalTheme(
                 title: "Eine kleine Nachtmusik opening",
                 tempo: 132,
@@ -76,6 +79,7 @@ extension Composer {
             inspiration: "Small steps can hold a universe when they move with care.",
             famousWork: "Cello Suite No. 1",
             color: Color(red: 0.22, green: 0.45, blue: 0.30),
+            portraitAssetName: "PortraitBach",
             theme: MusicalTheme(
                 title: "Cello Suite No. 1 prelude shape",
                 tempo: 96,
@@ -96,6 +100,7 @@ extension Composer {
             inspiration: "Softness is not weakness. It is precision with a heartbeat.",
             famousWork: "Nocturne Op. 9 No. 2",
             color: Color(red: 0.49, green: 0.28, blue: 0.58),
+            portraitAssetName: "PortraitChopin",
             theme: MusicalTheme(
                 title: "Nocturne Op. 9 No. 2 contour",
                 tempo: 72,
@@ -109,4 +114,3 @@ extension Composer {
         )
     ]
 }
-

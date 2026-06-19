@@ -11,18 +11,21 @@ struct ComposerJourneyView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                ComposerHeaderView(composer: composer)
+            ZStack {
+                PortraitBackgroundView(composer: composer)
 
-                PuzzleGameView(
-                    composer: composer,
-                    level: level + 1,
-                    board: $board,
-                    onReplay: replay,
-                    onNext: nextLevel
-                )
+                VStack(spacing: 0) {
+                    ComposerHeaderView(composer: composer)
+
+                    PuzzleGameView(
+                        composer: composer,
+                        level: level + 1,
+                        board: $board,
+                        onReplay: replay,
+                        onNext: nextLevel
+                    )
+                }
             }
-            .background(Color(red: 0.98, green: 0.97, blue: 0.94))
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button(player.isPlaying ? "Pause" : "Play") {
@@ -66,6 +69,34 @@ struct ComposerJourneyView: View {
     }
 }
 
+private struct PortraitBackgroundView: View {
+    let composer: Composer
+
+    var body: some View {
+        ZStack {
+            Image(composer.portraitAssetName)
+                .resizable()
+                .scaledToFill()
+                .blur(radius: 22)
+                .scaleEffect(1.12)
+                .opacity(0.58)
+
+            LinearGradient(
+                colors: [
+                    Color(red: 0.98, green: 0.97, blue: 0.94).opacity(0.88),
+                    composer.color.opacity(0.32),
+                    Color(red: 0.10, green: 0.11, blue: 0.13).opacity(0.18)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+
+            Color(red: 0.98, green: 0.97, blue: 0.94).opacity(0.36)
+        }
+        .ignoresSafeArea()
+    }
+}
+
 private struct ComposerHeaderView: View {
     let composer: Composer
 
@@ -98,6 +129,6 @@ private struct ComposerHeaderView: View {
                 .padding(.top, 2)
         }
         .padding(20)
+        .background(.ultraThinMaterial)
     }
 }
-

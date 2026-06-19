@@ -17,6 +17,7 @@ Use this checklist before App Store Connect submission.
 - Keep the first version on synthesized public-domain compositions.
 - Do not bundle commercial recordings unless there is written license documentation.
 - Document any future audio/image source and license in this repo before submission.
+- Review `docs/asset-credits.md` before submission and keep it aligned with bundled app assets.
 
 ## Preview Gate
 
@@ -27,4 +28,3 @@ The owner must preview and approve:
 - App Store name, subtitle, description, keywords, and category.
 - `jamesyyy.com` support/privacy/audit page.
 - China market filing plan.
-
