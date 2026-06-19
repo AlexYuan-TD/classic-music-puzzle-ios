@@ -88,12 +88,24 @@ private struct PortraitBackgroundView: View {
 
     var body: some View {
         ZStack {
-            Image(composer.portraitAssetName)
-                .resizable()
-                .scaledToFill()
-                .blur(radius: 22)
-                .scaleEffect(1.12)
-                .opacity(0.58)
+            if let portraitAssetName = composer.portraitAssetName {
+                Image(portraitAssetName)
+                    .resizable()
+                    .scaledToFill()
+                    .blur(radius: 22)
+                    .scaleEffect(1.12)
+                    .opacity(0.58)
+            } else {
+                LinearGradient(
+                    colors: [
+                        composer.color.opacity(0.58),
+                        Color(red: 0.98, green: 0.95, blue: 0.86),
+                        composer.color.opacity(0.22)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            }
 
             LinearGradient(
                 colors: [
@@ -228,16 +240,40 @@ private struct ComposerPortraitView: View {
     let composer: Composer
 
     var body: some View {
-        Image(composer.portraitAssetName)
-            .resizable()
-            .scaledToFill()
-            .frame(width: 78, height: 78)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            .overlay {
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(.white.opacity(0.78), lineWidth: 2)
+        Group {
+            if let portraitAssetName = composer.portraitAssetName {
+                Image(portraitAssetName)
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                ZStack {
+                    LinearGradient(
+                        colors: [composer.color, composer.color.opacity(0.58)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    Text(initials)
+                        .font(.system(size: 24, weight: .heavy, design: .serif))
+                        .foregroundStyle(.white)
+                }
             }
-            .shadow(color: composer.color.opacity(0.32), radius: 10, y: 4)
-            .accessibilityLabel(Text(composer.name.english))
+        }
+        .frame(width: 78, height: 78)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .overlay {
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(.white.opacity(0.78), lineWidth: 2)
+        }
+        .shadow(color: composer.color.opacity(0.32), radius: 10, y: 4)
+        .accessibilityLabel(Text(composer.name.english))
+    }
+
+    private var initials: String {
+        composer.name.english
+            .split(separator: " ")
+            .compactMap(\.first)
+            .prefix(2)
+            .map(String.init)
+            .joined()
     }
 }

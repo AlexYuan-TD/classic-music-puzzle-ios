@@ -11,6 +11,7 @@ Use this checklist before App Store Connect submission.
 - Confirm the App Store privacy details say no data is collected, if the app remains offline and analytics-free.
 - Confirm the app is listed as free with no in-app purchases.
 - Confirm English and Simplified Chinese copy are reviewed before screenshot generation.
+- Review `docs/theme-catalog.md` and approve the 30 prepared themes.
 - Prepare screenshots showing composer intro, music playback, flowing staff notes, the dinosaur piano-key guide, private reflection field, and swipe navigation.
 
 ## Intellectual Property

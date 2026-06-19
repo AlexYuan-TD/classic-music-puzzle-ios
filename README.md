@@ -8,6 +8,7 @@ Free iOS app for introducing classical composers through short inspiring message
 - English and Simplified Chinese app content with an in-app language switcher.
 - No ads, no accounts, no analytics, no tracking, and no in-app purchases.
 - Composer pages include a short introduction, one inspiring message, a portrait, and a famous public-domain theme.
+- The first catalog prepares 30 bilingual composer themes.
 - A cute little dinosaur sits on the correct piano key and moves to the next key after each correct tap.
 - Users can write a private reflection about what the music made them imagine or feel.
 - Users swipe left or right to move to the previous or next composer page.
