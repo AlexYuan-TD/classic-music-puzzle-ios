@@ -1,14 +1,14 @@
-# Classic Music Puzzle
+# Classic Music Rhythm
 
-Free iOS app for introducing classical composers through short inspiring messages, famous public-domain musical themes, and a simple-to-hard sliding puzzle game.
+Free iOS app for introducing classical composers through short inspiring messages, famous public-domain musical themes, and a rhythm-tap game with flowing staff notation.
 
 ## Product Shape
 
 - Native SwiftUI iOS app.
 - No ads, no accounts, no analytics, no tracking, and no in-app purchases.
-- Composer pages include a short introduction, one inspiring message, and a famous public-domain theme.
-- Puzzle levels progress from easy to hard: 3x3, 4x4, then 5x5.
-- On puzzle completion the user can stay, replay, or go to the next level.
+- Composer pages include a short introduction, one inspiring message, a portrait, and a famous public-domain theme.
+- Rhythm levels progress from easy to hard with more taps and faster flowing staff notes.
+- On rhythm completion the user can stay, replay, or go to the next level.
 - Music playback uses synthesized note data instead of bundled recordings to avoid separate recording rights.
 
 ## Local Setup
@@ -29,7 +29,7 @@ Draft audit, support, and privacy page:
 
 - `site/apple-audit-page/index.html`
 
-Publish this content under `https://jamesyyy.com/classic-music-puzzle/` before App Store submission, then use that URL for the App Store Connect Support URL and Privacy Policy URL.
+Publish this content under `https://jamesyyy.com/classic-music-rhythm/` before App Store submission, then use that URL for the App Store Connect Support URL and Privacy Policy URL.
 
 ## China Release Notes
 

@@ -6,11 +6,11 @@ Use this checklist before App Store Connect submission.
 
 - Test the app on a real device and current iOS simulator.
 - Confirm there are no crashes, placeholder screens, broken links, or unfinished content.
-- Publish the support/privacy/audit page on `https://jamesyyy.com/classic-music-puzzle/`.
+- Publish the support/privacy/audit page on `https://jamesyyy.com/classic-music-rhythm/`.
 - Use the `jamesyyy.com` page as both the Support URL and Privacy Policy URL unless separate pages are created.
 - Confirm the App Store privacy details say no data is collected, if the app remains offline and analytics-free.
 - Confirm the app is listed as free with no in-app purchases.
-- Prepare screenshots showing composer intro, music playback, puzzle level, and completion options.
+- Prepare screenshots showing composer intro, music playback, flowing staff rhythm level, and completion options.
 
 ## Intellectual Property
 

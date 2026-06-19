@@ -4,9 +4,6 @@ struct ComposerJourneyView: View {
     @StateObject private var player = ThemePlayer()
     @State private var composerIndex = 0
     @State private var level = 0
-    @State private var board = PuzzleBoard(size: 3)
-
-    private let sizes = [3, 4, 5]
     private var composer: Composer { Composer.catalog[composerIndex] }
 
     var body: some View {
@@ -17,10 +14,9 @@ struct ComposerJourneyView: View {
                 VStack(spacing: 0) {
                     ComposerHeaderView(composer: composer)
 
-                    PuzzleGameView(
+                    RhythmGameView(
                         composer: composer,
                         level: level + 1,
-                        board: $board,
                         onReplay: replay,
                         onNext: nextLevel
                     )
@@ -54,18 +50,17 @@ struct ComposerJourneyView: View {
     }
 
     private func replay() {
-        board = PuzzleBoard(size: sizes[level])
+        level = max(0, level)
     }
 
     private func nextLevel() {
-        if level < sizes.count - 1 {
+        if level < 2 {
             level += 1
         } else {
             level = 0
             composerIndex = (composerIndex + 1) % Composer.catalog.count
             player.play(theme: composer.theme)
         }
-        board = PuzzleBoard(size: sizes[level])
     }
 }
 

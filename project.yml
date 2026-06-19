@@ -22,7 +22,7 @@ targets:
     info:
       path: ClassicMusicPuzzleApp/ClassicMusicPuzzle/Resources/Info.plist
       properties:
-        CFBundleDisplayName: Classic Music Puzzle
+        CFBundleDisplayName: Classic Music Rhythm
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true
