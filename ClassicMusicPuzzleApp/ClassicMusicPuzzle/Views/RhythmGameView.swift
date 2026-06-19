@@ -2,11 +2,12 @@ import SwiftUI
 
 struct RhythmGameView: View {
     let composer: Composer
+    let language: AppLanguage
 
     @State private var taps = 0
     @State private var pulse = false
     @State private var completed = false
-    @State private var feedback = "Follow the staff and tap the piano keys"
+    @State private var feedbackKey = "start"
     @State private var expectedKeyIndex = 0
 
     private let targetTaps = 12
@@ -16,7 +17,7 @@ struct RhythmGameView: View {
     var body: some View {
         VStack(spacing: 18) {
             HStack {
-                Text("Follow the staff")
+                Text(localized("Follow the staff", "跟着五线谱"))
                     .font(.headline)
                 Spacer()
                 Text("\(min(taps, targetTaps))/\(targetTaps)")
@@ -34,12 +35,15 @@ struct RhythmGameView: View {
                     )
 
                     VStack(spacing: 12) {
-                        Text(feedback)
+                        Text(feedbackText)
                             .font(.system(size: 24, weight: .bold, design: .serif))
                             .multilineTextAlignment(.center)
                             .foregroundStyle(.primary)
 
-                        Text("Listen to \(composer.theme.title), watch the note, then choose the matching key.")
+                        Text(localized(
+                            "Listen to \(composer.theme.title.text(for: language)), watch the note, then choose the matching key.",
+                            "聆听\(composer.theme.title.text(for: language))，观察音符，然后点击对应琴键。"
+                        ))
                             .font(.footnote.weight(.medium))
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
@@ -61,6 +65,7 @@ struct RhythmGameView: View {
 
                 PianoKeyboardView(
                     composer: composer,
+                    language: language,
                     keys: keys,
                     expectedKey: keys[expectedKeyIndex],
                     onKeyTap: registerTap
@@ -68,7 +73,7 @@ struct RhythmGameView: View {
             }
 
             if completed {
-                Text("Great! Swipe left or right to meet another composer.")
+                Text(localized("Great! Swipe left or right to meet another composer.", "太棒了！左右滑动，认识下一位音乐家。"))
                     .font(.callout.weight(.semibold))
                     .foregroundStyle(composer.color)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -89,32 +94,52 @@ struct RhythmGameView: View {
 
         if key == keys[expectedKeyIndex] {
             taps += 1
-            feedback = tapFeedback(for: key)
+            feedbackKey = "correct.\(taps % 4).\(key.name)"
             expectedKeyIndex = (expectedKeyIndex + 1) % keys.count
         } else {
-            feedback = "Listen again. Try \(keys[expectedKeyIndex].name)."
+            feedbackKey = "wrong.\(keys[expectedKeyIndex].name)"
         }
 
         if taps >= targetTaps {
             completed = true
-            feedback = "You followed the melody."
+            feedbackKey = "completed"
         }
     }
 
-    private func tapFeedback(for key: PianoKey) -> String {
-        switch taps % 4 {
-        case 1: return "\(key.name) - clear tone"
-        case 2: return "\(key.name) - keep flowing"
-        case 3: return "\(key.name) - listen forward"
-        default: return "\(key.name) - beautiful timing"
+    private var feedbackText: String {
+        if feedbackKey == "start" {
+            return localized("Follow the staff and tap the piano keys", "跟着五线谱，点击钢琴键")
+        }
+        if feedbackKey == "completed" {
+            return localized("You followed the melody.", "你跟上了旋律。")
+        }
+        if feedbackKey.hasPrefix("wrong.") {
+            let key = feedbackKey.replacingOccurrences(of: "wrong.", with: "")
+            return localized("Listen again. Try \(key).", "再听一次，试试 \(key)。")
+        }
+        let parts = feedbackKey.split(separator: ".")
+        guard parts.count == 3 else {
+            return localized("Beautiful timing", "节奏很美")
+        }
+        let step = String(parts[1])
+        let key = String(parts[2])
+        switch step {
+        case "1": return localized("\(key) - clear tone", "\(key) - 清亮的音")
+        case "2": return localized("\(key) - keep flowing", "\(key) - 继续流动")
+        case "3": return localized("\(key) - listen forward", "\(key) - 向前聆听")
+        default: return localized("\(key) - beautiful timing", "\(key) - 节奏很美")
         }
     }
 
     private func reset() {
         taps = 0
         completed = false
-        feedback = "Follow the staff and tap the piano keys"
+        feedbackKey = "start"
         expectedKeyIndex = 0
+    }
+
+    private func localized(_ english: String, _ simplifiedChinese: String) -> String {
+        language == .english ? english : simplifiedChinese
     }
 }
 
@@ -180,6 +205,7 @@ private struct FlowingStaffView: View {
 
 private struct PianoKeyboardView: View {
     let composer: Composer
+    let language: AppLanguage
     let keys: [PianoKey]
     let expectedKey: PianoKey
     let onKeyTap: (PianoKey) -> Void
@@ -188,7 +214,7 @@ private struct PianoKeyboardView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Piano keys")
+            Text(language == .english ? "Piano keys" : "钢琴键")
                 .font(.caption.weight(.bold))
                 .foregroundStyle(.secondary)
 

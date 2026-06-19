@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0E2D898DE74C3A191A0FF7AB /* ThemePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECFE8A2C2F02CDCD33D785A /* ThemePlayer.swift */; };
 		316C182E5573333BE6498C1B /* ClassicMusicPuzzleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B131F11660A40C67DC9E64 /* ClassicMusicPuzzleApp.swift */; };
+		42553A0B23018C3C721AFE91 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 81603F32AF8EEA8350108AA7 /* InfoPlist.strings */; };
 		5C4F92C23168B1810CB2E61C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C75A5D6913282205B407575F /* Assets.xcassets */; };
 		B6689788862FADEEFFD40B67 /* Composer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27476A2AC7BB185AC7C5B76B /* Composer.swift */; };
 		C081C43EAE5129931ADDE888 /* RhythmGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FA433EE9F9E66AE0F277F88 /* RhythmGameView.swift */; };
@@ -16,7 +17,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		170DBD7B71B294888F5785FE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		27476A2AC7BB185AC7C5B76B /* Composer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Composer.swift; sourceTree = "<group>"; };
+		283C8F72743FD4E44CE83CD3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		82C6FB9543DF0759AFAF6C77 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		86E03478C686CBBA68DB7017 /* ClassicMusicPuzzle.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ClassicMusicPuzzle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FA433EE9F9E66AE0F277F88 /* RhythmGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RhythmGameView.swift; sourceTree = "<group>"; };
@@ -32,6 +35,7 @@
 			children = (
 				C75A5D6913282205B407575F /* Assets.xcassets */,
 				82C6FB9543DF0759AFAF6C77 /* Info.plist */,
+				81603F32AF8EEA8350108AA7 /* InfoPlist.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -128,6 +132,7 @@
 			knownRegions = (
 				Base,
 				en,
+				"zh-Hans",
 			);
 			mainGroup = A4689D5A56D656C538769DCB;
 			minimizedProjectReferenceProxies = 1;
@@ -147,6 +152,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5C4F92C23168B1810CB2E61C /* Assets.xcassets in Resources */,
+				42553A0B23018C3C721AFE91 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,6 +172,18 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		81603F32AF8EEA8350108AA7 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				283C8F72743FD4E44CE83CD3 /* en */,
+				170DBD7B71B294888F5785FE /* zh-Hans */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		1E0B39F6985674DC0616D46D /* Debug */ = {

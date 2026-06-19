@@ -10,6 +10,7 @@ Use this checklist before App Store Connect submission.
 - Use the `jamesyyy.com` page as both the Support URL and Privacy Policy URL unless separate pages are created.
 - Confirm the App Store privacy details say no data is collected, if the app remains offline and analytics-free.
 - Confirm the app is listed as free with no in-app purchases.
+- Confirm English and Simplified Chinese copy are reviewed before screenshot generation.
 - Prepare screenshots showing composer intro, music playback, flowing staff notes, the dinosaur piano-key guide, private reflection field, and swipe navigation.
 
 ## Intellectual Property

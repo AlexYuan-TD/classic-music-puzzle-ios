@@ -5,6 +5,7 @@ Free iOS app for introducing classical composers through short inspiring message
 ## Product Shape
 
 - Native SwiftUI iOS app.
+- English and Simplified Chinese app content with an in-app language switcher.
 - No ads, no accounts, no analytics, no tracking, and no in-app purchases.
 - Composer pages include a short introduction, one inspiring message, a portrait, and a famous public-domain theme.
 - A cute little dinosaur sits on the correct piano key and moves to the next key after each correct tap.

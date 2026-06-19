@@ -2,8 +2,12 @@ import SwiftUI
 
 struct ComposerJourneyView: View {
     @StateObject private var player = ThemePlayer()
+    @AppStorage("app.language") private var languageRawValue = AppLanguage.simplifiedChinese.rawValue
     @State private var composerIndex = 0
     private var composer: Composer { Composer.catalog[composerIndex] }
+    private var language: AppLanguage {
+        AppLanguage(rawValue: languageRawValue) ?? .simplifiedChinese
+    }
 
     var body: some View {
         NavigationStack {
@@ -12,13 +16,14 @@ struct ComposerJourneyView: View {
 
                 ScrollView {
                     VStack(spacing: 0) {
-                        ComposerHeaderView(composer: composer)
+                        ComposerHeaderView(composer: composer, language: language)
 
                         RhythmGameView(
-                            composer: composer
+                            composer: composer,
+                            language: language
                         )
 
-                        ReflectionNoteView(composer: composer)
+                        ReflectionNoteView(composer: composer, language: language)
                     }
                 }
             }
@@ -34,16 +39,25 @@ struct ComposerJourneyView: View {
             )
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(player.isPlaying ? "Pause" : "Play") {
+                    Button(player.isPlaying ? localized("Pause", "暂停") : localized("Play", "播放")) {
                         player.isPlaying ? player.stop() : player.play(theme: composer.theme)
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Menu("Composer") {
+                    Menu(localized("Composer", "音乐家")) {
                         ForEach(Array(Composer.catalog.enumerated()), id: \.element.id) { index, item in
-                            Button(item.name) {
+                            Button(item.name.text(for: language)) {
                                 composerIndex = index
                                 player.play(theme: item.theme)
+                            }
+                        }
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu(language.displayName) {
+                        ForEach(AppLanguage.allCases) { item in
+                            Button(item.displayName) {
+                                languageRawValue = item.rawValue
                             }
                         }
                     }
@@ -62,6 +76,10 @@ struct ComposerJourneyView: View {
         let count = Composer.catalog.count
         composerIndex = (composerIndex + offset + count) % count
         player.play(theme: composer.theme)
+    }
+
+    private func localized(_ english: String, _ simplifiedChinese: String) -> String {
+        language == .english ? english : simplifiedChinese
     }
 }
 
@@ -95,6 +113,7 @@ private struct PortraitBackgroundView: View {
 
 private struct ComposerHeaderView: View {
     let composer: Composer
+    let language: AppLanguage
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -103,15 +122,15 @@ private struct ComposerHeaderView: View {
                     ComposerPortraitView(composer: composer)
 
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(composer.name)
+                        Text(composer.name.text(for: language))
                             .font(.title2.weight(.bold))
-                        Text("\(composer.years) - \(composer.country)")
+                        Text("\(composer.years) - \(composer.country.text(for: language))")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
                 }
                 Spacer()
-                Text(composer.famousWork)
+                Text(composer.famousWork.text(for: language))
                     .font(.caption.weight(.semibold))
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
@@ -119,11 +138,11 @@ private struct ComposerHeaderView: View {
                     .clipShape(Capsule())
             }
 
-            Text(composer.introduction)
+            Text(composer.introduction.text(for: language))
                 .font(.body)
                 .foregroundStyle(.primary)
 
-            Text(composer.inspiration)
+            Text(composer.inspiration.text(for: language))
                 .font(.system(size: 30, weight: .heavy, design: .serif))
                 .italic()
                 .lineSpacing(6)
@@ -161,16 +180,18 @@ private struct ComposerHeaderView: View {
 
 private struct ReflectionNoteView: View {
     let composer: Composer
+    let language: AppLanguage
     @AppStorage private var note: String
 
-    init(composer: Composer) {
+    init(composer: Composer, language: AppLanguage) {
         self.composer = composer
+        self.language = language
         _note = AppStorage(wrappedValue: "", "reflection.\(composer.id)")
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("听到这段音乐，你想到了什么？")
+            Text(localized("What did this music bring to mind?", "听到这段音乐，你想到了什么？"))
                 .font(.headline)
 
             TextEditor(text: $note)
@@ -185,7 +206,7 @@ private struct ReflectionNoteView: View {
                 }
                 .overlay(alignment: .topLeading) {
                     if note.isEmpty {
-                        Text("写下一个画面、回忆、颜色或心情...")
+                        Text(localized("Write a feeling, image, memory, or color...", "写下一个画面、回忆、颜色或心情..."))
                             .font(.body)
                             .foregroundStyle(.secondary)
                             .padding(.horizontal, 16)
@@ -196,6 +217,10 @@ private struct ReflectionNoteView: View {
         }
         .padding(20)
         .background(.ultraThinMaterial)
+    }
+
+    private func localized(_ english: String, _ simplifiedChinese: String) -> String {
+        language == .english ? english : simplifiedChinese
     }
 }
 
@@ -213,6 +238,6 @@ private struct ComposerPortraitView: View {
                     .stroke(.white.opacity(0.78), lineWidth: 2)
             }
             .shadow(color: composer.color.opacity(0.32), radius: 10, y: 4)
-            .accessibilityLabel(Text("\(composer.name) portrait"))
+            .accessibilityLabel(Text(composer.name.english))
     }
 }
