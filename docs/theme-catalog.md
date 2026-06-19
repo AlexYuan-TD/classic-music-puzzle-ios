@@ -1,6 +1,6 @@
 # 30 Theme Catalog
 
-Initial app catalog for the bilingual classical music listening experience.
+Initial app catalog for the bilingual classical music journey experience.
 
 | # | Composer | 中文 | Famous work / theme |
 |---|---|---|---|

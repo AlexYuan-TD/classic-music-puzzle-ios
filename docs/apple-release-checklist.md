@@ -6,9 +6,11 @@ Use this checklist before App Store Connect submission.
 
 - Test the app on a real device and current iOS simulator.
 - Confirm there are no crashes, placeholder screens, broken links, or unfinished content.
-- Publish the support/privacy/audit page on `https://jamesyyy.com/classic-music-rhythm/`.
+- Publish the support/privacy/audit page on `https://jamesyyy.com/classic-music-journey/`.
 - Use the `jamesyyy.com` page as both the Support URL and Privacy Policy URL unless separate pages are created.
 - Confirm the App Store privacy details say no data is collected, if the app remains offline and analytics-free.
+- Use `docs/app-store-metadata.md` for the first App Store product page draft.
+- Use `docs/app-privacy-answers.md` for the first App Store Connect privacy answers.
 - Confirm the app is listed as free with no in-app purchases.
 - Confirm English and Simplified Chinese copy are reviewed before screenshot generation.
 - Review `docs/theme-catalog.md` and approve the 30 prepared themes.

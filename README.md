@@ -1,4 +1,4 @@
-# Classic Music Rhythm
+# Classic Music Journey
 
 Free iOS app for introducing classical composers through short poetic listening pages, famous public-domain musical themes, and immersive poem reveals.
 
@@ -32,7 +32,7 @@ Draft audit, support, and privacy page:
 
 - `site/apple-audit-page/index.html`
 
-Publish this content under `https://jamesyyy.com/classic-music-rhythm/` before App Store submission, then use that URL for the App Store Connect Support URL and Privacy Policy URL.
+Publish this content under `https://jamesyyy.com/classic-music-journey/` before App Store submission, then use that URL for the App Store Connect Support URL and Privacy Policy URL.
 
 ## China Release Notes
 
