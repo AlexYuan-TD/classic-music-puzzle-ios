@@ -124,9 +124,24 @@ private struct ComposerHeaderView: View {
                 .foregroundStyle(.primary)
 
             Text(composer.inspiration)
-                .font(.callout.weight(.semibold))
-                .foregroundStyle(composer.color)
-                .padding(.top, 2)
+                .font(.system(size: 24, weight: .bold, design: .serif))
+                .lineSpacing(4)
+                .foregroundStyle(.primary)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(composer.color.opacity(0.14))
+                )
+                .overlay(alignment: .leading) {
+                    Rectangle()
+                        .fill(composer.color)
+                        .frame(width: 4)
+                        .clipShape(Capsule())
+                        .padding(.vertical, 10)
+                }
+                .padding(.top, 6)
         }
         .padding(20)
         .background(.ultraThinMaterial)
