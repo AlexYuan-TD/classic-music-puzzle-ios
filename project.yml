@@ -23,7 +23,12 @@ targets:
       path: ClassicMusicPuzzleApp/ClassicMusicPuzzle/Resources/Info.plist
       properties:
         CFBundleDisplayName: Classic Music Puzzle
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSRequiresIPhoneOS: true
         UILaunchScreen: {}
+        UIApplicationSupportsIndirectInputEvents: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
-

@@ -13,7 +13,7 @@ Free iOS app for introducing classical composers through short inspiring message
 
 ## Local Setup
 
-This repo is configured for XcodeGen because the current machine has Command Line Tools but not full Xcode selected.
+The Xcode project is included. It can also be regenerated with XcodeGen.
 
 ```sh
 brew install xcodegen
@@ -40,4 +40,3 @@ Before publishing to mainland China app markets, complete the China mobile app f
 ## Preview Gate
 
 Do not submit to App Store Connect or any China app market until the owner previews and approves the app, store listing, screenshots, and audit page.
-
