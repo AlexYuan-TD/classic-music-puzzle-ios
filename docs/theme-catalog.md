@@ -1,6 +1,6 @@
 # 30 Theme Catalog
 
-Initial app catalog for the bilingual classical music rhythm experience.
+Initial app catalog for the bilingual classical music listening experience.
 
 | # | Composer | 中文 | Famous work / theme |
 |---|---|---|---|
@@ -37,3 +37,4 @@ Initial app catalog for the bilingual classical music rhythm experience.
 
 Note: The first version includes public-domain portrait assets for the first four composers. The remaining themes use generated color/initial placeholders until verified public-domain portraits are added.
 
+Chinese listening mode pairs themes with classical Chinese poetry. English listening mode pairs themes with public-domain Western poetry excerpts.

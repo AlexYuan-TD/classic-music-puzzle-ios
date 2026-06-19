@@ -398,7 +398,7 @@ extension Composer {
             years: "1891-1953",
             country: LocalizedCopy(english: "Russia", simplifiedChinese: "俄罗斯"),
             introduction: LocalizedCopy(english: "Prokofiev sharpened fairy tales and rhythm until music could grin and leap.", simplifiedChinese: "普罗科菲耶夫把童话和节奏磨得锋利，让音乐会咧嘴笑、会跳跃。"),
-            inspiration: LocalizedCopy(english: "Keep your edge; play can still be brave.", simplifiedChinese: "保留你的锋芒，游戏也可以很勇敢。"),
+            inspiration: LocalizedCopy(english: "Keep your edge; playfulness can still be brave.", simplifiedChinese: "保留你的锋芒，玩心也可以很勇敢。"),
             famousWork: LocalizedCopy(english: "Peter and the Wolf", simplifiedChinese: "彼得与狼"),
             color: Color(red: 0.68, green: 0.24, blue: 0.18),
             portraitAssetName: nil,

@@ -12,7 +12,6 @@
 		42553A0B23018C3C721AFE91 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 81603F32AF8EEA8350108AA7 /* InfoPlist.strings */; };
 		5C4F92C23168B1810CB2E61C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C75A5D6913282205B407575F /* Assets.xcassets */; };
 		B6689788862FADEEFFD40B67 /* Composer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27476A2AC7BB185AC7C5B76B /* Composer.swift */; };
-		C081C43EAE5129931ADDE888 /* RhythmGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FA433EE9F9E66AE0F277F88 /* RhythmGameView.swift */; };
 		F90D94D21CBBE576DC26D942 /* ComposerJourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C306147412046BBBEAAEB7 /* ComposerJourneyView.swift */; };
 /* End PBXBuildFile section */
 
@@ -22,7 +21,6 @@
 		283C8F72743FD4E44CE83CD3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		82C6FB9543DF0759AFAF6C77 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		86E03478C686CBBA68DB7017 /* ClassicMusicPuzzle.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ClassicMusicPuzzle.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		8FA433EE9F9E66AE0F277F88 /* RhythmGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RhythmGameView.swift; sourceTree = "<group>"; };
 		91B131F11660A40C67DC9E64 /* ClassicMusicPuzzleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassicMusicPuzzleApp.swift; sourceTree = "<group>"; };
 		94C306147412046BBBEAAEB7 /* ComposerJourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerJourneyView.swift; sourceTree = "<group>"; };
 		C75A5D6913282205B407575F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -52,7 +50,6 @@
 			isa = PBXGroup;
 			children = (
 				94C306147412046BBBEAAEB7 /* ComposerJourneyView.swift */,
-				8FA433EE9F9E66AE0F277F88 /* RhythmGameView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -166,7 +163,6 @@
 				316C182E5573333BE6498C1B /* ClassicMusicPuzzleApp.swift in Sources */,
 				B6689788862FADEEFFD40B67 /* Composer.swift in Sources */,
 				F90D94D21CBBE576DC26D942 /* ComposerJourneyView.swift in Sources */,
-				C081C43EAE5129931ADDE888 /* RhythmGameView.swift in Sources */,
 				0E2D898DE74C3A191A0FF7AB /* ThemePlayer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

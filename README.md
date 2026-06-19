@@ -1,18 +1,17 @@
 # Classic Music Rhythm
 
-Free iOS app for introducing classical composers through short inspiring messages, famous public-domain musical themes, and a piano-key rhythm game with flowing staff notation.
+Free iOS app for introducing classical composers through short poetic listening pages, famous public-domain musical themes, and immersive poem reveals.
 
 ## Product Shape
 
 - Native SwiftUI iOS app.
 - English and Simplified Chinese app content with an in-app language switcher.
 - No ads, no accounts, no analytics, no tracking, and no in-app purchases.
-- Composer pages include a short introduction, one inspiring message, a portrait, and a famous public-domain theme.
+- Composer pages include a short introduction, a portrait, a famous public-domain theme, and a matching poem.
 - The first catalog prepares 30 bilingual composer themes.
-- A cute little dinosaur sits on the correct piano key and moves to the next key after each correct tap.
-- Users can write a private reflection about what the music made them imagine or feel.
+- Chinese mode uses fitting classical Chinese poems; English mode uses public-domain Western poems.
 - Users swipe left or right to move to the previous or next composer page.
-- On rhythm completion the app encourages the user to swipe to another composer.
+- Poem lines gradually fade in as the music plays.
 - Music playback uses synthesized note data instead of bundled recordings to avoid separate recording rights.
 
 ## Local Setup
