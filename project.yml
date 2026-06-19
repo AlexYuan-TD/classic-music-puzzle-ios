@@ -15,7 +15,7 @@ targets:
       - ClassicMusicPuzzleApp/ClassicMusicPuzzle
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.jamesyyy.classicmusicpuzzle
+        PRODUCT_BUNDLE_IDENTIFIER: com.jamesyyy.classicmusicjourney
         INFOPLIST_FILE: ClassicMusicPuzzleApp/ClassicMusicPuzzle/Resources/Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         SWIFT_VERSION: 5.10

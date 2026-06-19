@@ -38,7 +38,7 @@ After enrollment:
 
 1. Sign in to App Store Connect.
 2. Create a new app record.
-3. Use bundle ID: `com.jamesyyy.classicmusicpuzzle`.
+3. Use bundle ID: `com.jamesyyy.classicmusicjourney`.
 4. Use app name: `Classic Music Journey`.
 5. Add English and Simplified Chinese metadata from `docs/app-store-metadata.md`.
 6. Add privacy answers from `docs/app-privacy-answers.md`.
@@ -53,4 +53,3 @@ Do not submit to App Review until:
 - `https://jamesyyy.com/classic-music-journey/` is live.
 - App screenshots are created and approved.
 - China ICP/app market plan is reviewed.
-

@@ -16,7 +16,7 @@ open ClassicMusicPuzzle.xcodeproj
 Then:
 
 - Select your Apple Developer team.
-- Confirm bundle ID: `com.jamesyyy.classicmusicpuzzle`.
+- Confirm bundle ID: `com.jamesyyy.classicmusicjourney`.
 - Build and run on an iOS simulator.
 - Test on a real iPhone if available.
 
@@ -32,7 +32,7 @@ Use that URL for Support URL and Privacy Policy URL in App Store Connect.
 
 After developer account approval:
 
-- Create app record.
+- Create app record using `docs/app-store-connect-setup.md`.
 - Add metadata from `docs/app-store-metadata.md`.
 - Add privacy answers from `docs/app-privacy-answers.md`.
 - Upload screenshots.
@@ -46,4 +46,3 @@ Before mainland China release:
 - Review `docs/china-icp-and-app-market.md`.
 - Confirm whether app filing / ICP-related steps apply for the operator and domain.
 - Add required filing details to the public website if required.
-
