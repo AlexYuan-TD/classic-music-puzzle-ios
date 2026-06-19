@@ -193,6 +193,8 @@ private struct PianoKeyboardView: View {
     let expectedKey: PianoKey
     let onKeyTap: (PianoKey) -> Void
 
+    @Namespace private var petNamespace
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Piano keys")
@@ -205,6 +207,15 @@ private struct PianoKeyboardView: View {
                         onKeyTap(key)
                     } label: {
                         VStack(spacing: 5) {
+                            ZStack {
+                                if key == expectedKey {
+                                    MusicPetView(color: composer.color)
+                                        .matchedGeometryEffect(id: "music-pet", in: petNamespace)
+                                        .transition(.scale.combined(with: .opacity))
+                                }
+                            }
+                            .frame(height: 34)
+
                             Text(key.name)
                                 .font(.caption.weight(.bold))
                             Circle()
@@ -226,7 +237,42 @@ private struct PianoKeyboardView: View {
                     .accessibilityLabel("Piano key \(key.name)")
                 }
             }
+            .animation(.spring(response: 0.34, dampingFraction: 0.72), value: expectedKey)
         }
+    }
+}
+
+private struct MusicPetView: View {
+    let color: Color
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(color)
+                .frame(width: 28, height: 28)
+
+            Circle()
+                .fill(.white.opacity(0.92))
+                .frame(width: 5, height: 5)
+                .offset(x: -5, y: -3)
+
+            Circle()
+                .fill(.white.opacity(0.92))
+                .frame(width: 5, height: 5)
+                .offset(x: 5, y: -3)
+
+            Capsule()
+                .fill(.white.opacity(0.88))
+                .frame(width: 11, height: 3)
+                .offset(y: 7)
+
+            Text("♪")
+                .font(.system(size: 14, weight: .bold))
+                .foregroundStyle(.white)
+                .offset(x: 18, y: -16)
+        }
+        .shadow(color: color.opacity(0.34), radius: 8, y: 4)
+        .accessibilityHidden(true)
     }
 }
 

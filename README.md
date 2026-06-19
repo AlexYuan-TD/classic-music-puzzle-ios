@@ -8,6 +8,7 @@ Free iOS app for introducing classical composers through short inspiring message
 - No ads, no accounts, no analytics, no tracking, and no in-app purchases.
 - Composer pages include a short introduction, one inspiring message, a portrait, and a famous public-domain theme.
 - Rhythm levels progress from easy to hard with more key taps and faster flowing staff notes.
+- A small music pet sits on the correct piano key and moves to the next key after each correct tap.
 - On rhythm completion the user can stay, replay, or go to the next level.
 - Music playback uses synthesized note data instead of bundled recordings to avoid separate recording rights.
 
