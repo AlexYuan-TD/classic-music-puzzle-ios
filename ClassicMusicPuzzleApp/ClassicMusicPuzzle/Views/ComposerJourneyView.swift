@@ -15,29 +15,34 @@ struct ComposerJourneyView: View {
 
     var body: some View {
         NavigationStack {
-            ZStack {
-                PortraitBackgroundView(composer: composer)
+            GeometryReader { proxy in
+                let layout = JourneyLayout(size: proxy.size)
 
-                ScrollView {
-                    VStack(spacing: 0) {
-                        ComposerHeaderView(composer: composer, language: language)
-                        ArtQuoteView(composer: composer, language: language)
-                        ImmersivePoemView(composer: composer, language: language)
-                        ListenerReflectionView(composer: composer, language: language, reflections: $reflections)
-                    }
-                    .frame(maxWidth: .infinity)
-                }
+                ZStack {
+                    PortraitBackgroundView(composer: composer)
 
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        ComposerAssistantButton(composer: composer, language: language) {
-                            isAssistantPresented = true
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            ComposerHeaderView(composer: composer, language: language, layout: layout)
+                            ArtQuoteView(composer: composer, language: language, layout: layout)
+                            ImmersivePoemView(composer: composer, language: language, layout: layout)
+                            ListenerReflectionView(composer: composer, language: language, layout: layout, reflections: $reflections)
                         }
+                        .frame(maxWidth: .infinity)
+                        .padding(.bottom, layout.scrollBottomInset)
                     }
-                    .padding(.trailing, 18)
-                    .padding(.bottom, 22)
+
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            ComposerAssistantButton(composer: composer, language: language, layout: layout) {
+                                isAssistantPresented = true
+                            }
+                        }
+                        .padding(.trailing, layout.outerPadding)
+                        .padding(.bottom, layout.outerPadding)
+                    }
                 }
             }
             .gesture(
@@ -112,27 +117,50 @@ struct ComposerJourneyView: View {
     }
 }
 
+private struct JourneyLayout {
+    let isCompact: Bool
+
+    init(size: CGSize) {
+        isCompact = size.width <= 380 || size.height <= 700
+    }
+
+    var outerPadding: CGFloat { isCompact ? 12 : 20 }
+    var sectionPadding: CGFloat { isCompact ? 14 : 20 }
+    var portraitSize: CGFloat { isCompact ? 62 : 78 }
+    var quoteSizeEnglish: CGFloat { isCompact ? 25 : 32 }
+    var quoteSizeChinese: CGFloat { isCompact ? 28 : 34 }
+    var poemTitleSize: CGFloat { isCompact ? 21 : 26 }
+    var poemLineSizeEnglish: CGFloat { isCompact ? 18 : 22 }
+    var poemLineSizeChinese: CGFloat { isCompact ? 21 : 25 }
+    var poemMinHeight: CGFloat { isCompact ? 250 : 340 }
+    var assistantMascotSize: CGFloat { isCompact ? 34 : 42 }
+    var scrollBottomInset: CGFloat { isCompact ? 86 : 104 }
+}
+
 private struct ComposerAssistantButton: View {
     let composer: Composer
     let language: AppLanguage
+    let layout: JourneyLayout
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 10) {
-                ComposerAssistantMascot(composer: composer, size: 42)
+            HStack(spacing: layout.isCompact ? 7 : 10) {
+                ComposerAssistantMascot(composer: composer, size: layout.assistantMascotSize)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(language == .english ? "Ask Maestro" : "问问 Maestro")
+                    Text(layout.isCompact ? "Maestro" : (language == .english ? "Ask Maestro" : "问问 Maestro"))
                         .font(.caption.weight(.heavy))
-                    Text(language == .english ? composer.name.english : "当前音乐家")
-                        .font(.caption2.weight(.semibold))
-                        .lineLimit(1)
-                        .foregroundStyle(.secondary)
+                    if !layout.isCompact {
+                        Text(language == .english ? composer.name.english : "当前音乐家")
+                            .font(.caption2.weight(.semibold))
+                            .lineLimit(1)
+                            .foregroundStyle(.secondary)
+                    }
                 }
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 9)
+            .padding(.horizontal, layout.isCompact ? 9 : 12)
+            .padding(.vertical, layout.isCompact ? 7 : 9)
             .background(.ultraThinMaterial)
             .clipShape(Capsule())
             .overlay {
@@ -341,6 +369,7 @@ private enum ComposerAssistant {
 private struct ListenerReflectionView: View {
     let composer: Composer
     let language: AppLanguage
+    let layout: JourneyLayout
     @Binding var reflections: [ListenerReflection]
     @State private var draft = ""
     @State private var isExpanded = false
@@ -351,15 +380,15 @@ private struct ListenerReflectionView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: layout.isCompact ? 11 : 14) {
             Button {
                 withAnimation(.easeInOut(duration: 0.22)) {
                     isExpanded.toggle()
                 }
             } label: {
-                HStack(spacing: 10) {
+                HStack(spacing: layout.isCompact ? 8 : 10) {
                     Image(systemName: isExpanded ? "text.bubble.fill" : "text.bubble")
-                        .font(.system(size: 16, weight: .bold))
+                        .font(.system(size: layout.isCompact ? 14 : 16, weight: .bold))
                         .foregroundStyle(composer.color)
 
                     VStack(alignment: .leading, spacing: 2) {
@@ -378,8 +407,8 @@ private struct ListenerReflectionView: View {
                         .font(.caption.weight(.bold))
                         .foregroundStyle(.secondary)
                 }
-                .padding(.horizontal, 14)
-                .padding(.vertical, 11)
+                .padding(.horizontal, layout.isCompact ? 11 : 14)
+                .padding(.vertical, layout.isCompact ? 9 : 11)
                 .background(.white.opacity(0.34))
                 .clipShape(Capsule())
                 .overlay {
@@ -390,7 +419,7 @@ private struct ListenerReflectionView: View {
             .buttonStyle(.plain)
 
             if isExpanded {
-                VStack(alignment: .leading, spacing: 14) {
+                VStack(alignment: .leading, spacing: layout.isCompact ? 11 : 14) {
                     VStack(alignment: .leading, spacing: 5) {
                         Text(localized("What did the music awaken?", "这段音乐让你想到了什么？"))
                             .font(.caption.weight(.bold))
@@ -407,7 +436,7 @@ private struct ListenerReflectionView: View {
                     TextField(localized("A memory, an image, a sentence...", "一段记忆、一个画面、一句话……"), text: $draft, axis: .vertical)
                         .textFieldStyle(.plain)
                         .lineLimit(3...6)
-                        .padding(14)
+                        .padding(layout.isCompact ? 11 : 14)
                         .background(.white.opacity(0.42))
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                         .overlay {
@@ -454,7 +483,7 @@ private struct ListenerReflectionView: View {
                 .padding(.top, 4)
             }
         }
-        .padding(20)
+        .padding(layout.sectionPadding)
         .background(
             LinearGradient(
                 colors: [
@@ -476,8 +505,8 @@ private struct ListenerReflectionView: View {
                 .fill(classicalLineGradient)
                 .frame(height: 1)
         }
-        .padding(.horizontal, 20)
-        .padding(.bottom, 22)
+        .padding(.horizontal, layout.outerPadding)
+        .padding(.bottom, layout.isCompact ? 14 : 22)
     }
 
     private var reflectionSummary: String {
@@ -662,41 +691,44 @@ private struct PaperTextureView: View {
 private struct ComposerHeaderView: View {
     let composer: Composer
     let language: AppLanguage
+    let layout: JourneyLayout
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(alignment: .center, spacing: 14) {
-                ComposerPortraitView(composer: composer)
+        VStack(alignment: .leading, spacing: layout.isCompact ? 9 : 12) {
+            HStack(alignment: .center, spacing: layout.isCompact ? 11 : 14) {
+                ComposerPortraitView(composer: composer, size: layout.portraitSize)
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(composer.name.text(for: language))
-                        .font(.title2.weight(.bold))
+                        .font((layout.isCompact ? Font.headline : Font.title2).weight(.bold))
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.86)
                     Text("\(composer.years) - \(composer.country.text(for: language))")
-                        .font(.subheadline)
+                        .font(layout.isCompact ? .caption : .subheadline)
                         .foregroundStyle(.secondary)
                 }
 
                 Spacer()
             }
 
-            HStack {
-                Text(composer.famousWork.text(for: language))
-                    .font(.caption.weight(.semibold))
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(composer.color.opacity(0.12))
-                    .clipShape(Capsule())
-
-                Text(composer.theme.title.text(for: language))
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
+            if layout.isCompact {
+                VStack(alignment: .leading, spacing: 7) {
+                    workPill
+                    themeTitle
+                }
+            } else {
+                HStack(alignment: .firstTextBaseline, spacing: 10) {
+                    workPill
+                    themeTitle
+                }
             }
 
             Text(composer.introduction.text(for: language))
-                .font(.body)
+                .font(layout.isCompact ? .callout : .body)
                 .foregroundStyle(.primary)
+                .lineSpacing(layout.isCompact ? 2 : 0)
         }
-        .padding(20)
+        .padding(layout.sectionPadding)
         .background(.white.opacity(0.40))
         .overlay(alignment: .top) {
             Rectangle()
@@ -709,6 +741,25 @@ private struct ComposerHeaderView: View {
                 .frame(height: 1)
         }
         .background(.ultraThinMaterial)
+    }
+
+    private var workPill: some View {
+        Text(composer.famousWork.text(for: language))
+            .font(.caption.weight(.semibold))
+            .lineLimit(layout.isCompact ? 2 : 1)
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(composer.color.opacity(0.12))
+            .clipShape(Capsule())
+    }
+
+    private var themeTitle: some View {
+        Text(composer.theme.title.text(for: language))
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(.secondary)
+            .lineLimit(layout.isCompact ? 2 : 1)
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     private var classicalLineGradient: LinearGradient {
@@ -815,15 +866,16 @@ private struct DecorativeDividerStatic: View {
 private struct ArtQuoteView: View {
     let composer: Composer
     let language: AppLanguage
+    let layout: JourneyLayout
 
     var body: some View {
-        VStack(spacing: 14) {
+        VStack(spacing: layout.isCompact ? 10 : 14) {
             DecorativeDivider(composer: composer)
 
             Text(composer.inspiration.text(for: language))
-                .font(.system(size: language == .english ? 32 : 34, weight: .black, design: .serif))
+                .font(.system(size: language == .english ? layout.quoteSizeEnglish : layout.quoteSizeChinese, weight: .black, design: .serif))
                 .italic()
-                .lineSpacing(7)
+                .lineSpacing(layout.isCompact ? 5 : 7)
                 .multilineTextAlignment(.leading)
                 .foregroundStyle(
                     LinearGradient(
@@ -837,8 +889,8 @@ private struct ArtQuoteView: View {
 
             DecorativeDivider(composer: composer, alignment: .trailing)
         }
-        .padding(.horizontal, 24)
-        .padding(.vertical, 20)
+        .padding(.horizontal, layout.isCompact ? 18 : 24)
+        .padding(.vertical, layout.isCompact ? 16 : 20)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
@@ -859,6 +911,7 @@ private struct DecorativeDivider: View {
 private struct ImmersivePoemView: View {
     let composer: Composer
     let language: AppLanguage
+    let layout: JourneyLayout
     @State private var startDate = Date()
 
     var body: some View {
@@ -868,27 +921,31 @@ private struct ImmersivePoemView: View {
             let elapsed = timeline.date.timeIntervalSince(startDate)
             let visibleCount = min(poem.lines.count, max(1, Int(elapsed / 2.4) + 1))
 
-            VStack(alignment: .center, spacing: 18) {
-                VStack(alignment: .center, spacing: 6) {
+            VStack(alignment: .center, spacing: layout.isCompact ? 14 : 18) {
+                VStack(alignment: .center, spacing: layout.isCompact ? 4 : 6) {
                     Text(localized("Poem for this music", "给这段音乐的诗"))
                         .font(.caption.weight(.bold))
                         .foregroundStyle(composer.color)
 
                     Text(poem.title)
-                        .font(.system(size: 26, weight: .bold, design: .serif))
+                        .font(.system(size: layout.poemTitleSize, weight: .bold, design: .serif))
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.84)
                         .foregroundStyle(.primary)
 
                     Text(poem.author)
-                        .font(.subheadline)
+                        .font(layout.isCompact ? .caption : .subheadline)
+                        .multilineTextAlignment(.center)
                         .foregroundStyle(.secondary)
                 }
 
-                VStack(alignment: .leading, spacing: 14) {
+                VStack(alignment: .leading, spacing: layout.isCompact ? 10 : 14) {
                     ForEach(Array(poem.lines.enumerated()), id: \.offset) { index, line in
                         Text(line)
-                            .font(.system(size: language == .english ? 22 : 25, weight: .semibold, design: .serif))
+                            .font(.system(size: language == .english ? layout.poemLineSizeEnglish : layout.poemLineSizeChinese, weight: .semibold, design: .serif))
                             .italic()
-                            .lineSpacing(7)
+                            .lineSpacing(layout.isCompact ? 4 : 7)
                             .multilineTextAlignment(.center)
                             .frame(maxWidth: .infinity, alignment: .center)
                             .foregroundStyle(.primary.opacity(index < visibleCount ? 0.96 : 0.0))
@@ -900,12 +957,12 @@ private struct ImmersivePoemView: View {
                 .padding(.vertical, 8)
 
                 Text(localized("Swipe to drift into another composer.", "左右滑动，进入另一位音乐家的世界。"))
-                    .font(.footnote.weight(.medium))
+                    .font((layout.isCompact ? Font.caption : Font.footnote).weight(.medium))
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
             }
-            .padding(24)
-            .frame(maxWidth: .infinity, minHeight: 340, alignment: .top)
+            .padding(layout.isCompact ? 18 : 24)
+            .frame(maxWidth: .infinity, minHeight: layout.poemMinHeight, alignment: .top)
             .background(
                 LinearGradient(
                     colors: [
@@ -927,7 +984,7 @@ private struct ImmersivePoemView: View {
                     .fill(classicalLineGradient)
                     .frame(height: 1)
             }
-            .padding(20)
+            .padding(layout.outerPadding)
             .onChange(of: composer) { _, _ in
                 startDate = Date()
             }
@@ -1022,6 +1079,7 @@ private enum PoemLibrary {
 
 private struct ComposerPortraitView: View {
     let composer: Composer
+    var size: CGFloat = 78
 
     var body: some View {
         Group {
@@ -1037,12 +1095,12 @@ private struct ComposerPortraitView: View {
                         endPoint: .bottomTrailing
                     )
                     Text(initials)
-                        .font(.system(size: 24, weight: .heavy, design: .serif))
+                        .font(.system(size: size * 0.31, weight: .heavy, design: .serif))
                         .foregroundStyle(.white)
                 }
             }
         }
-        .frame(width: 78, height: 78)
+        .frame(width: size, height: size)
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .overlay {
             RoundedRectangle(cornerRadius: 8)
