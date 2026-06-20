@@ -4,6 +4,7 @@ struct ComposerJourneyView: View {
     @StateObject private var player = ThemePlayer()
     @AppStorage("app.language") private var languageRawValue = AppLanguage.simplifiedChinese.rawValue
     @State private var composerIndex = 0
+    @State private var isAssistantPresented = false
 
     private var composer: Composer { Composer.catalog[composerIndex] }
     private var language: AppLanguage {
@@ -24,6 +25,18 @@ struct ComposerJourneyView: View {
                         AboutJamesView(composer: composer, language: language)
                     }
                     .frame(maxWidth: .infinity)
+                }
+
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        ComposerAssistantButton(composer: composer, language: language) {
+                            isAssistantPresented = true
+                        }
+                    }
+                    .padding(.trailing, 18)
+                    .padding(.bottom, 22)
                 }
             }
             .gesture(
@@ -68,6 +81,10 @@ struct ComposerJourneyView: View {
             .onChange(of: composerIndex) { _, _ in
                 player.play(theme: composer.theme)
             }
+            .sheet(isPresented: $isAssistantPresented) {
+                ComposerAssistantSheet(composer: composer, language: language)
+                    .presentationDetents([.medium, .large])
+            }
         }
     }
 
@@ -79,6 +96,232 @@ struct ComposerJourneyView: View {
 
     private func localized(_ english: String, _ simplifiedChinese: String) -> String {
         language == .english ? english : simplifiedChinese
+    }
+}
+
+private struct ComposerAssistantButton: View {
+    let composer: Composer
+    let language: AppLanguage
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 10) {
+                ComposerAssistantMascot(composer: composer, size: 42)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(language == .english ? "Ask Maestro" : "问问 Maestro")
+                        .font(.caption.weight(.heavy))
+                    Text(language == .english ? composer.name.english : "当前音乐家")
+                        .font(.caption2.weight(.semibold))
+                        .lineLimit(1)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 9)
+            .background(.ultraThinMaterial)
+            .clipShape(Capsule())
+            .overlay {
+                Capsule()
+                    .stroke(composer.color.opacity(0.28), lineWidth: 1)
+            }
+            .shadow(color: composer.color.opacity(0.22), radius: 14, y: 8)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(Text(language == .english ? "Open composer assistant" : "打开音乐家助手"))
+    }
+}
+
+private struct ComposerAssistantMascot: View {
+    let composer: Composer
+    var size: CGFloat = 54
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(
+                    LinearGradient(
+                        colors: [composer.color, composer.color.opacity(0.52)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+
+            Circle()
+                .fill(.white.opacity(0.18))
+                .frame(width: size * 0.72, height: size * 0.72)
+                .offset(x: -size * 0.12, y: -size * 0.14)
+
+            Image(systemName: "music.note")
+                .font(.system(size: size * 0.40, weight: .black))
+                .foregroundStyle(.white)
+                .offset(y: -size * 0.04)
+
+            Image(systemName: "person.fill")
+                .font(.system(size: size * 0.26, weight: .bold))
+                .foregroundStyle(.white.opacity(0.88))
+                .offset(y: size * 0.18)
+        }
+        .frame(width: size, height: size)
+        .overlay {
+            Circle()
+                .stroke(.white.opacity(0.78), lineWidth: 2)
+        }
+    }
+}
+
+private struct ComposerAssistantSheet: View {
+    let composer: Composer
+    let language: AppLanguage
+    @State private var draft = ""
+    @State private var messages: [AssistantChatMessage] = []
+
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                PortraitBackgroundView(composer: composer)
+
+                VStack(spacing: 0) {
+                    VStack(spacing: 10) {
+                        ComposerAssistantMascot(composer: composer, size: 62)
+
+                        Text(title)
+                            .font(.system(size: 24, weight: .black, design: .serif))
+                            .multilineTextAlignment(.center)
+
+                        Text(subtitle)
+                            .font(.footnote)
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.top, 24)
+                    .padding(.bottom, 14)
+
+                    ScrollView {
+                        LazyVStack(spacing: 12) {
+                            ForEach(activeMessages) { message in
+                                AssistantMessageBubble(message: message, composer: composer)
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 16)
+                    }
+
+                    HStack(spacing: 10) {
+                        TextField(inputPlaceholder, text: $draft, axis: .vertical)
+                            .textFieldStyle(.plain)
+                            .lineLimit(1...3)
+                            .padding(12)
+                            .background(.white.opacity(0.45))
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(composer.color.opacity(0.18), lineWidth: 1)
+                            }
+
+                        Button(language == .english ? "Send" : "发送") {
+                            send()
+                        }
+                        .font(.footnote.weight(.bold))
+                        .buttonStyle(.borderedProminent)
+                        .tint(composer.color)
+                        .disabled(draft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    }
+                    .padding(16)
+                    .background(.ultraThinMaterial)
+                }
+            }
+            .navigationTitle(language == .english ? "Composer Chat" : "音乐家对话")
+            .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                if messages.isEmpty {
+                    messages = [welcomeMessage]
+                }
+            }
+        }
+    }
+
+    private var activeMessages: [AssistantChatMessage] {
+        messages.isEmpty ? [welcomeMessage] : messages
+    }
+
+    private var title: String {
+        language == .english ? "Maestro speaks for \(composer.name.english)" : "Maestro 代表\(composer.name.simplifiedChinese)与你对话"
+    }
+
+    private var subtitle: String {
+        language == .english
+            ? "Ask about the music, the composer, or what to listen for in this moment."
+            : "可以问这段音乐、这位音乐家，或现在应该听见什么。"
+    }
+
+    private var inputPlaceholder: String {
+        language == .english ? "What would you like to ask?" : "你想问这位音乐家什么？"
+    }
+
+    private var welcomeMessage: AssistantChatMessage {
+        AssistantChatMessage(
+            isUser: false,
+            text: language == .english
+                ? "I am listening with you. Ask me why \(composer.famousWork.english) still feels alive today."
+                : "我正在和你一起听。你可以问我：为什么\(composer.famousWork.simplifiedChinese)今天仍然打动人？"
+        )
+    }
+
+    private func send() {
+        let question = draft.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !question.isEmpty else { return }
+
+        messages.append(AssistantChatMessage(isUser: true, text: question))
+        messages.append(AssistantChatMessage(isUser: false, text: ComposerAssistant.reply(to: question, composer: composer, language: language)))
+        draft = ""
+    }
+}
+
+private struct AssistantMessageBubble: View {
+    let message: AssistantChatMessage
+    let composer: Composer
+
+    var body: some View {
+        HStack {
+            if message.isUser {
+                Spacer(minLength: 40)
+            }
+
+            Text(message.text)
+                .font(.body)
+                .lineSpacing(4)
+                .padding(13)
+                .foregroundStyle(message.isUser ? .white : .primary)
+                .background(message.isUser ? composer.color.opacity(0.86) : .white.opacity(0.48))
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(message.isUser ? .clear : composer.color.opacity(0.18), lineWidth: 1)
+                }
+
+            if !message.isUser {
+                Spacer(minLength: 40)
+            }
+        }
+    }
+}
+
+private struct AssistantChatMessage: Identifiable, Equatable {
+    let id = UUID()
+    let isUser: Bool
+    let text: String
+}
+
+private enum ComposerAssistant {
+    static func reply(to question: String, composer: Composer, language: AppLanguage) -> String {
+        if language == .english {
+            return "If \(composer.name.english) could answer, the first clue might be this: \(composer.inspiration.english) In \(composer.famousWork.english), listen for how a small musical idea becomes a feeling you can carry."
+        }
+
+        return "如果\(composer.name.simplifiedChinese)来回答，也许会先说：\(composer.inspiration.simplifiedChinese) 听\(composer.famousWork.simplifiedChinese)时，可以留意一个很小的音乐动机，如何慢慢变成可以带走的情绪。"
     }
 }
 
