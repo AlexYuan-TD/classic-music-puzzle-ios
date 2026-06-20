@@ -5,6 +5,7 @@ struct ComposerJourneyView: View {
     @AppStorage("app.language") private var languageRawValue = AppLanguage.simplifiedChinese.rawValue
     @State private var composerIndex = 0
     @State private var isAssistantPresented = false
+    @State private var reflections: [ListenerReflection] = []
 
     private var composer: Composer { Composer.catalog[composerIndex] }
     private var language: AppLanguage {
@@ -21,6 +22,7 @@ struct ComposerJourneyView: View {
                         ComposerHeaderView(composer: composer, language: language)
                         ArtQuoteView(composer: composer, language: language)
                         ImmersivePoemView(composer: composer, language: language)
+                        ListenerReflectionView(composer: composer, language: language, reflections: $reflections)
                         FilmReferenceStrip(composer: composer, language: language)
                         AboutJamesView(composer: composer, language: language)
                     }
@@ -322,6 +324,203 @@ private enum ComposerAssistant {
         }
 
         return "如果\(composer.name.simplifiedChinese)来回答，也许会先说：\(composer.inspiration.simplifiedChinese) 听\(composer.famousWork.simplifiedChinese)时，可以留意一个很小的音乐动机，如何慢慢变成可以带走的情绪。"
+    }
+}
+
+private struct ListenerReflectionView: View {
+    let composer: Composer
+    let language: AppLanguage
+    @Binding var reflections: [ListenerReflection]
+    @State private var draft = ""
+    @State private var visibility = ReflectionVisibility.privateOnly
+
+    private var composerReflections: [ListenerReflection] {
+        reflections.filter { $0.composerID == composer.id }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(alignment: .top, spacing: 12) {
+                VStack(alignment: .leading, spacing: 5) {
+                    Text(localized("What did the music awaken?", "这段音乐让你想到了什么？"))
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(composer.color)
+
+                    Text(localized(
+                        "Leave a private note, or mark it public for the future community wall.",
+                        "写一段只给自己看的听后感，或标记为公开，未来进入公共留言墙。"
+                    ))
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+            }
+
+            TextField(localized("A memory, an image, a sentence...", "一段记忆、一个画面、一句话……"), text: $draft, axis: .vertical)
+                .textFieldStyle(.plain)
+                .lineLimit(3...6)
+                .padding(14)
+                .background(.white.opacity(0.42))
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(composer.color.opacity(0.18), lineWidth: 1)
+                }
+
+            Picker(localized("Visibility", "可见范围"), selection: $visibility) {
+                ForEach(ReflectionVisibility.allCases) { item in
+                    Text(item.title(for: language)).tag(item)
+                }
+            }
+            .pickerStyle(.segmented)
+
+            HStack {
+                Text(visibility.description(for: language))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                Spacer()
+
+                Button(localized("Save", "保存")) {
+                    save()
+                }
+                .font(.footnote.weight(.bold))
+                .buttonStyle(.borderedProminent)
+                .tint(composer.color)
+                .disabled(draft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            }
+
+            if !composerReflections.isEmpty {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text(localized("Your reflections", "你的留言"))
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(.secondary)
+
+                    ForEach(composerReflections) { reflection in
+                        ReflectionRow(reflection: reflection, composer: composer, language: language)
+                    }
+                }
+                .padding(.top, 4)
+            }
+        }
+        .padding(20)
+        .background(
+            LinearGradient(
+                colors: [
+                    .white.opacity(0.22),
+                    composer.color.opacity(0.08),
+                    .white.opacity(0.08)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .overlay(alignment: .top) {
+            Rectangle()
+                .fill(classicalLineGradient)
+                .frame(height: 1)
+        }
+        .overlay(alignment: .bottom) {
+            Rectangle()
+                .fill(classicalLineGradient)
+                .frame(height: 1)
+        }
+        .padding(.horizontal, 20)
+        .padding(.bottom, 22)
+    }
+
+    private func save() {
+        let text = draft.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty else { return }
+
+        reflections.insert(
+            ListenerReflection(composerID: composer.id, text: text, visibility: visibility),
+            at: 0
+        )
+        draft = ""
+    }
+
+    private func localized(_ english: String, _ simplifiedChinese: String) -> String {
+        language == .english ? english : simplifiedChinese
+    }
+
+    private var classicalLineGradient: LinearGradient {
+        LinearGradient(
+            colors: [.clear, composer.color.opacity(0.28), .clear],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+    }
+}
+
+private struct ReflectionRow: View {
+    let reflection: ListenerReflection
+    let composer: Composer
+    let language: AppLanguage
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 7) {
+            HStack {
+                Text(reflection.visibility.title(for: language))
+                    .font(.caption2.weight(.heavy))
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .foregroundStyle(reflection.visibility == .publicWall ? composer.color : .secondary)
+                    .background(.white.opacity(0.38))
+                    .clipShape(Capsule())
+
+                Spacer()
+            }
+
+            Text(reflection.text)
+                .font(.footnote)
+                .lineSpacing(4)
+                .foregroundStyle(.primary.opacity(0.9))
+        }
+        .padding(12)
+        .background(.white.opacity(0.28))
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .overlay {
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(composer.color.opacity(0.14), lineWidth: 1)
+        }
+    }
+}
+
+private struct ListenerReflection: Identifiable, Equatable {
+    let id = UUID()
+    let composerID: String
+    let text: String
+    let visibility: ReflectionVisibility
+}
+
+private enum ReflectionVisibility: String, CaseIterable, Identifiable {
+    case privateOnly
+    case publicWall
+
+    var id: String { rawValue }
+
+    func title(for language: AppLanguage) -> String {
+        switch (self, language) {
+        case (.privateOnly, .english): return "Only me"
+        case (.privateOnly, .simplifiedChinese): return "仅自己可见"
+        case (.publicWall, .english): return "Public"
+        case (.publicWall, .simplifiedChinese): return "公开"
+        }
+    }
+
+    func description(for language: AppLanguage) -> String {
+        switch (self, language) {
+        case (.privateOnly, .english):
+            return "Saved on this device."
+        case (.privateOnly, .simplifiedChinese):
+            return "只保存在本机。"
+        case (.publicWall, .english):
+            return "Will appear on the public wall after online sync and moderation are enabled."
+        case (.publicWall, .simplifiedChinese):
+            return "后续接入同步和审核后，可进入公共留言墙。"
+        }
     }
 }
 
