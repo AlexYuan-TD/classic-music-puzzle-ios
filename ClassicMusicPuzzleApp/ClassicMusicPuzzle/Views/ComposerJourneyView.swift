@@ -114,8 +114,41 @@ private struct PortraitBackgroundView: View {
                 startPoint: .top,
                 endPoint: .bottom
             )
+
+            PaperTextureView(accentColor: composer.color)
         }
         .ignoresSafeArea()
+    }
+}
+
+private struct PaperTextureView: View {
+    let accentColor: Color
+
+    var body: some View {
+        GeometryReader { proxy in
+            ZStack {
+                ForEach(0..<Int(proxy.size.height / 5 + 1), id: \.self) { index in
+                    Rectangle()
+                        .fill(Color(red: 0.31, green: 0.22, blue: 0.12).opacity(0.045))
+                        .frame(height: 1)
+                        .offset(y: CGFloat(index * 5))
+                }
+
+                Circle()
+                    .fill(accentColor.opacity(0.075))
+                    .frame(width: 180, height: 180)
+                    .blur(radius: 34)
+                    .position(x: proxy.size.width * 0.18, y: proxy.size.height * 0.28)
+
+                Circle()
+                    .fill(Color(red: 0.36, green: 0.25, blue: 0.12).opacity(0.055))
+                    .frame(width: 150, height: 150)
+                    .blur(radius: 30)
+                    .position(x: proxy.size.width * 0.82, y: proxy.size.height * 0.14)
+            }
+        }
+        .opacity(0.72)
+        .allowsHitTesting(false)
     }
 }
 
@@ -157,7 +190,26 @@ private struct ComposerHeaderView: View {
                 .foregroundStyle(.primary)
         }
         .padding(20)
+        .background(.white.opacity(0.40))
+        .overlay(alignment: .top) {
+            Rectangle()
+                .fill(classicalLineGradient)
+                .frame(height: 1)
+        }
+        .overlay(alignment: .bottom) {
+            Rectangle()
+                .fill(classicalLineGradient)
+                .frame(height: 1)
+        }
         .background(.ultraThinMaterial)
+    }
+
+    private var classicalLineGradient: LinearGradient {
+        LinearGradient(
+            colors: [.clear, composer.color.opacity(0.24), .clear],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
     }
 }
 
@@ -180,8 +232,9 @@ private struct FilmReferenceStrip: View {
                     HStack(spacing: 10) {
                         ForEach(references) { reference in
                             VStack(spacing: 7) {
-                                Image(systemName: "film")
-                                    .font(.title3.weight(.bold))
+                                Text("▥")
+                                    .font(.system(size: 19, weight: .heavy, design: .serif))
+                                    .foregroundStyle(composer.color)
                                 Text(reference.shortTitle)
                                     .font(.caption2.weight(.heavy))
                                     .lineLimit(1)
@@ -191,11 +244,21 @@ private struct FilmReferenceStrip: View {
                             }
                             .frame(width: 74, height: 82)
                             .foregroundStyle(.primary)
-                            .background(.white.opacity(0.54))
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .background(.white.opacity(0.36))
+                            .clipShape(RoundedRectangle(cornerRadius: 3))
+                            .overlay(alignment: .top) {
+                                Rectangle()
+                                    .fill(composer.color.opacity(0.24))
+                                    .frame(height: 1)
+                            }
+                            .overlay(alignment: .bottom) {
+                                Rectangle()
+                                    .fill(composer.color.opacity(0.18))
+                                    .frame(height: 1)
+                            }
                             .overlay {
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(composer.color.opacity(0.18), lineWidth: 1)
+                                RoundedRectangle(cornerRadius: 3)
+                                    .stroke(.white.opacity(0.18), lineWidth: 1)
                             }
                         }
                     }
@@ -267,27 +330,42 @@ private struct ArtQuoteView: View {
     let language: AppLanguage
 
     var body: some View {
-        Text(composer.inspiration.text(for: language))
-            .font(.system(size: language == .english ? 32 : 34, weight: .black, design: .serif))
-            .italic()
-            .lineSpacing(7)
-            .foregroundStyle(
-                LinearGradient(
-                    colors: [composer.color, .primary, composer.color.opacity(0.72)],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
+        VStack(spacing: 14) {
+            DecorativeDivider(composer: composer)
+
+            Text(composer.inspiration.text(for: language))
+                .font(.system(size: language == .english ? 32 : 34, weight: .black, design: .serif))
+                .italic()
+                .lineSpacing(7)
+                .multilineTextAlignment(.leading)
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [composer.color, .primary, composer.color.opacity(0.72)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
                 )
-            )
-            .shadow(color: .white.opacity(0.72), radius: 1, y: 1)
-            .padding(.horizontal, 24)
-            .padding(.vertical, 20)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .overlay(alignment: .leading) {
-                Rectangle()
-                    .fill(composer.color.opacity(0.72))
-                    .frame(width: 3)
-                    .padding(.vertical, 18)
-            }
+                .shadow(color: .white.opacity(0.72), radius: 1, y: 1)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            DecorativeDivider(composer: composer, alignment: .trailing)
+        }
+        .padding(.horizontal, 24)
+        .padding(.vertical, 20)
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+private struct DecorativeDivider: View {
+    let composer: Composer
+    var alignment: Alignment = .leading
+
+    var body: some View {
+        Text("-  ❦  -")
+            .font(.system(size: 15, weight: .bold, design: .serif))
+            .tracking(1.4)
+            .foregroundStyle(composer.color.opacity(0.78))
+            .frame(maxWidth: .infinity, alignment: alignment)
     }
 }
 
@@ -352,6 +430,16 @@ private struct ImmersivePoemView: View {
                     endPoint: .bottom
                 )
             )
+            .overlay(alignment: .top) {
+                Rectangle()
+                    .fill(classicalLineGradient)
+                    .frame(height: 1)
+            }
+            .overlay(alignment: .bottom) {
+                Rectangle()
+                    .fill(classicalLineGradient)
+                    .frame(height: 1)
+            }
             .padding(20)
             .onChange(of: composer) { _, _ in
                 startDate = Date()
@@ -364,6 +452,14 @@ private struct ImmersivePoemView: View {
 
     private func localized(_ english: String, _ simplifiedChinese: String) -> String {
         language == .english ? english : simplifiedChinese
+    }
+
+    private var classicalLineGradient: LinearGradient {
+        LinearGradient(
+            colors: [.clear, composer.color.opacity(0.30), .clear],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
     }
 }
 
