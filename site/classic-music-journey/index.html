@@ -201,7 +201,7 @@
         linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent) 22%, transparent), transparent) bottom / 100% 1px no-repeat,
         linear-gradient(180deg, rgb(255 255 255 / 10%), color-mix(in srgb, var(--accent) 8%, transparent), rgb(255 255 255 / 2%));
     }
-    .eyebrow, .film-title {
+    .eyebrow {
       color: var(--accent);
       font-size: 12px;
       font-weight: 900;
@@ -218,37 +218,68 @@
       font-weight: 700;
       line-height: 1.34;
     }
-    .film-section {
+    .reflection {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       margin-top: 16px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgb(255 255 255 / 36%);
+      border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
     }
-    .film-row {
+    .reflection-icon {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
-      margin-top: 10px;
-    }
-    .film-card {
-      min-width: 0;
-      padding: 8px 5px;
-      text-align: center;
-      border-radius: 3px;
-      background: rgb(255 255 255 / 38%);
-      border-top: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
-      border-bottom: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
-    }
-    .film-icon, .film-name {
-      display: block;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      color: white;
+      background: var(--accent);
+      font-size: 15px;
       font-weight: 900;
     }
-    .film-icon {
-      color: color-mix(in srgb, var(--accent) 76%, #5e4222);
-      font-size: 18px;
+    .reflection strong,
+    .assistant-launch strong {
+      display: block;
+      font-size: 13px;
+      line-height: 1.1;
     }
-    .film-name, .film-year {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-size: 10px;
+    .reflection span:not(.reflection-icon),
+    .assistant-launch span:not(.mascot) {
+      display: block;
+      color: #6b7280;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .assistant-launch {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 12px 9px 9px;
+      border-radius: 999px;
+      background: rgb(255 255 255 / 58%);
+      border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+      box-shadow: 0 12px 28px color-mix(in srgb, var(--accent) 18%, transparent);
+      backdrop-filter: blur(16px);
+    }
+    .mascot {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: white;
+      background:
+        radial-gradient(circle at 32% 24%, rgb(255 255 255 / 28%), transparent 35%),
+        linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 58%, white));
+      border: 2px solid rgb(255 255 255 / 72%);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      font-weight: 900;
     }
     .site-section {
       margin-top: 36px;
@@ -269,8 +300,8 @@
     <section class="hero">
       <div class="ornament">-  ❦  -</div>
       <h1>Classic Music Journey</h1>
-      <p class="summary">A free iOS listening app by James Yuan. It introduces classical composers through blurred portraits, famous themes, inspiring quotes, public-domain poetry, and cinematic references.</p>
-      <p class="summary">古典音乐之旅是一款免费 iOS 应用，用音乐家肖像、代表旋律、诗歌与电影回响，引导更多人感受古典音乐的美好。</p>
+      <p class="summary">A free iOS listening app by James Yuan. It introduces classical composers through blurred portraits, famous themes, inspiring quotes, public-domain poetry, reflective notes, and a Maestro assistant.</p>
+      <p class="summary">古典音乐之旅是一款免费 iOS 应用，用音乐家肖像、代表旋律、诗歌、听后感与 Maestro 助手，引导更多人感受古典音乐的美好。</p>
     </section>
 
     <section class="preview-grid" aria-label="App page previews">
@@ -284,7 +315,8 @@
           <p class="intro">Beethoven turned struggle into sound, giving classical form a more human, storm-lit voice.</p>
           <div class="quote">Begin again with courage. Even silence can become music.</div>
           <section class="poem"><div class="eyebrow">Poem for this music</div><h3>Prometheus Unbound</h3><div class="author">Percy Bysshe Shelley</div><p class="line">To suffer woes which Hope thinks infinite;</p><p class="line">To forgive wrongs darker than death or night.</p></section>
-          <section class="film-section"><div class="film-title">Cinema echoes</div><div class="film-row"><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Fantasia</span><span class="film-year">2000</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Beethoven</span><span class="film-year">1992</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Immortal</span><span class="film-year">1994</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Clockwork</span><span class="film-year">1971</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">King Speech</span><span class="film-year">2010</span></div></div></section>
+          <section class="reflection"><span class="reflection-icon">✎</span><div><strong>Leave a reflection</strong><span>Tap when a thought arrives</span></div></section>
+          <div class="assistant-launch"><span class="mascot">♪</span><div><strong>Ask Maestro</strong><span>Ludwig van Beethoven</span></div></div>
         </div>
       </article>
 
@@ -298,7 +330,8 @@
           <p class="intro">Mozart made clarity feel effortless, filling simple shapes with wit, grace, and surprise.</p>
           <div class="quote">Let lightness be serious. Joy can be a discipline.</div>
           <section class="poem"><div class="eyebrow">Poem for this music</div><h3>Auguries of Innocence</h3><div class="author">William Blake</div><p class="line">To see a World in a Grain of Sand</p><p class="line">And a Heaven in a Wild Flower.</p></section>
-          <section class="film-section"><div class="film-title">Cinema echoes</div><div class="film-row"><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Amadeus</span><span class="film-year">1984</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Ace</span><span class="film-year">1994</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Bonfire</span><span class="film-year">1990</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Nikita</span><span class="film-year">1990</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Alien</span><span class="film-year">1979</span></div></div></section>
+          <section class="reflection"><span class="reflection-icon">✎</span><div><strong>Leave a reflection</strong><span>Tap when a thought arrives</span></div></section>
+          <div class="assistant-launch"><span class="mascot">♪</span><div><strong>Ask Maestro</strong><span>Wolfgang Mozart</span></div></div>
         </div>
       </article>
 
@@ -312,7 +345,8 @@
           <p class="intro">Bach built musical cathedrals from pattern, patience, and spiritual intensity.</p>
           <div class="quote">Small steps can hold a universe when they move with care.</div>
           <section class="poem"><div class="eyebrow">Poem for this music</div><h3>Ode: Intimations</h3><div class="author">William Wordsworth</div><p class="line">Trailing clouds of glory do we come</p><p class="line">From God, who is our home.</p></section>
-          <section class="film-section"><div class="film-title">Cinema echoes</div><div class="film-row"><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Pianist</span><span class="film-year">2002</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">M&C</span><span class="film-year">2003</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Elysium</span><span class="film-year">2013</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Hangover</span><span class="film-year">2011</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Soloist</span><span class="film-year">2009</span></div></div></section>
+          <section class="reflection"><span class="reflection-icon">✎</span><div><strong>Leave a reflection</strong><span>Tap when a thought arrives</span></div></section>
+          <div class="assistant-launch"><span class="mascot">♪</span><div><strong>Ask Maestro</strong><span>Johann Bach</span></div></div>
         </div>
       </article>
 
@@ -326,7 +360,8 @@
           <p class="intro">Chopin made the piano speak privately, as if a room could remember every feeling.</p>
           <div class="quote">Softness is not weakness. It is precision with a heartbeat.</div>
           <section class="poem"><div class="eyebrow">Poem for this music</div><h3>She Walks in Beauty</h3><div class="author">Lord Byron</div><p class="line">She walks in beauty, like the night</p><p class="line">Of cloudless climes and starry skies.</p></section>
-          <section class="film-section"><div class="film-title">Cinema echoes</div><div class="film-row"><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Pianist</span><span class="film-year">2002</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Shine</span><span class="film-year">1996</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Impromptu</span><span class="film-year">1991</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Notebook</span><span class="film-year">2004</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Tree Life</span><span class="film-year">2011</span></div></div></section>
+          <section class="reflection"><span class="reflection-icon">✎</span><div><strong>Leave a reflection</strong><span>Tap when a thought arrives</span></div></section>
+          <div class="assistant-launch"><span class="mascot">♪</span><div><strong>Ask Maestro</strong><span>Frederic Chopin</span></div></div>
         </div>
       </article>
 
@@ -340,7 +375,8 @@
           <p class="intro">Vivaldi painted weather, light, and motion with strings that seem to breathe.</p>
           <div class="quote">Let the season change you without losing your pulse.</div>
           <section class="poem"><div class="eyebrow">Poem for this music</div><h3>Lines Written in Early Spring</h3><div class="author">William Wordsworth</div><p class="line">To her fair works did Nature link</p><p class="line">The human soul that through me ran.</p></section>
-          <section class="film-section"><div class="film-title">Cinema echoes</div><div class="film-row"><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Pretty</span><span class="film-year">1990</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Portrait</span><span class="film-year">2019</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">John Wick</span><span class="film-year">2019</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Flubber</span><span class="film-year">1997</span></div><div class="film-card"><span class="film-icon">▥</span><span class="film-name">Fantastic</span><span class="film-year">2015</span></div></div></section>
+          <section class="reflection"><span class="reflection-icon">✎</span><div><strong>Leave a reflection</strong><span>Tap when a thought arrives</span></div></section>
+          <div class="assistant-launch"><span class="mascot">♪</span><div><strong>Ask Maestro</strong><span>Antonio Vivaldi</span></div></div>
         </div>
       </article>
     </section>
