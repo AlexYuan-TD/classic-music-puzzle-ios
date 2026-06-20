@@ -196,8 +196,8 @@ private struct ImmersivePoemView: View {
             let elapsed = timeline.date.timeIntervalSince(startDate)
             let visibleCount = min(poem.lines.count, max(1, Int(elapsed / 2.4) + 1))
 
-            VStack(alignment: .leading, spacing: 18) {
-                VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .center, spacing: 18) {
+                VStack(alignment: .center, spacing: 6) {
                     Text(localized("Poem for this music", "给这段音乐的诗"))
                         .font(.caption.weight(.bold))
                         .foregroundStyle(composer.color)
@@ -217,6 +217,8 @@ private struct ImmersivePoemView: View {
                             .font(.system(size: language == .english ? 22 : 25, weight: .semibold, design: .serif))
                             .italic()
                             .lineSpacing(7)
+                            .multilineTextAlignment(.center)
+                            .frame(maxWidth: .infinity, alignment: .center)
                             .foregroundStyle(.primary.opacity(index < visibleCount ? 0.96 : 0.0))
                             .blur(radius: index < visibleCount ? 0 : 8)
                             .offset(y: index < visibleCount ? 0 : 10)
@@ -227,10 +229,11 @@ private struct ImmersivePoemView: View {
 
                 Text(localized("Swipe to drift into another composer.", "左右滑动，进入另一位音乐家的世界。"))
                     .font(.footnote.weight(.medium))
+                    .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
             }
             .padding(24)
-            .frame(maxWidth: .infinity, minHeight: 340, alignment: .topLeading)
+            .frame(maxWidth: .infinity, minHeight: 340, alignment: .top)
             .background(
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
