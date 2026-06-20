@@ -20,6 +20,7 @@ struct ComposerJourneyView: View {
                         ComposerHeaderView(composer: composer, language: language)
                         ArtQuoteView(composer: composer, language: language)
                         ImmersivePoemView(composer: composer, language: language)
+                        FilmReferenceStrip(composer: composer, language: language)
                     }
                     .frame(maxWidth: .infinity)
                 }
@@ -157,6 +158,107 @@ private struct ComposerHeaderView: View {
         }
         .padding(20)
         .background(.ultraThinMaterial)
+    }
+}
+
+private struct FilmReferenceStrip: View {
+    let composer: Composer
+    let language: AppLanguage
+
+    private var references: [FilmReference] {
+        FilmReferenceLibrary.references(for: composer.id)
+    }
+
+    var body: some View {
+        if !references.isEmpty {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(language == .english ? "Cinema echoes" : "电影里的回响")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(composer.color)
+
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 10) {
+                        ForEach(references) { reference in
+                            VStack(spacing: 7) {
+                                Image(systemName: "film")
+                                    .font(.title3.weight(.bold))
+                                Text(reference.shortTitle)
+                                    .font(.caption2.weight(.heavy))
+                                    .lineLimit(1)
+                                Text(reference.year)
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                            }
+                            .frame(width: 74, height: 82)
+                            .foregroundStyle(.primary)
+                            .background(.white.opacity(0.54))
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(composer.color.opacity(0.18), lineWidth: 1)
+                            }
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 24)
+        }
+    }
+}
+
+private struct FilmReference: Identifiable {
+    let id: String
+    let shortTitle: String
+    let year: String
+}
+
+private enum FilmReferenceLibrary {
+    static func references(for composerID: String) -> [FilmReference] {
+        switch composerID {
+        case "beethoven":
+            return [
+                FilmReference(id: "fantasia-2000", shortTitle: "Fantasia", year: "2000"),
+                FilmReference(id: "beethoven-1992", shortTitle: "Beethoven", year: "1992"),
+                FilmReference(id: "immortal-beloved", shortTitle: "Immortal", year: "1994"),
+                FilmReference(id: "clockwork-orange", shortTitle: "Clockwork", year: "1971"),
+                FilmReference(id: "kings-speech", shortTitle: "King Speech", year: "2010")
+            ]
+        case "mozart":
+            return [
+                FilmReference(id: "amadeus", shortTitle: "Amadeus", year: "1984"),
+                FilmReference(id: "ace-ventura", shortTitle: "Ace", year: "1994"),
+                FilmReference(id: "bonfire", shortTitle: "Bonfire", year: "1990"),
+                FilmReference(id: "nikita", shortTitle: "Nikita", year: "1990"),
+                FilmReference(id: "alien", shortTitle: "Alien", year: "1979")
+            ]
+        case "bach":
+            return [
+                FilmReference(id: "pianist", shortTitle: "Pianist", year: "2002"),
+                FilmReference(id: "master-commander", shortTitle: "M&C", year: "2003"),
+                FilmReference(id: "elysium", shortTitle: "Elysium", year: "2013"),
+                FilmReference(id: "hangover-2", shortTitle: "Hangover", year: "2011"),
+                FilmReference(id: "soloist", shortTitle: "Soloist", year: "2009")
+            ]
+        case "chopin":
+            return [
+                FilmReference(id: "pianist-chopin", shortTitle: "Pianist", year: "2002"),
+                FilmReference(id: "shine", shortTitle: "Shine", year: "1996"),
+                FilmReference(id: "impromptu", shortTitle: "Impromptu", year: "1991"),
+                FilmReference(id: "notebook", shortTitle: "Notebook", year: "2004"),
+                FilmReference(id: "tree-life", shortTitle: "Tree Life", year: "2011")
+            ]
+        case "vivaldi":
+            return [
+                FilmReference(id: "pretty-woman", shortTitle: "Pretty", year: "1990"),
+                FilmReference(id: "portrait-fire", shortTitle: "Portrait", year: "2019"),
+                FilmReference(id: "john-wick-3", shortTitle: "John Wick", year: "2019"),
+                FilmReference(id: "flubber", shortTitle: "Flubber", year: "1997"),
+                FilmReference(id: "fantastic-four", shortTitle: "Fantastic", year: "2015")
+            ]
+        default:
+            return []
+        }
     }
 }
 
