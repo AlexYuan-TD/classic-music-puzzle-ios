@@ -12,6 +12,7 @@ Free iOS app for introducing classical composers through short poetic listening 
 - Chinese mode uses fitting classical Chinese poems; English mode uses public-domain Western poems.
 - Users swipe left or right to move to the previous or next composer page.
 - Poem lines gradually fade in as the music plays.
+- The app includes an About James Yuan section linking to `https://www.jamesyyy.com`.
 - Music playback uses synthesized note data instead of bundled recordings to avoid separate recording rights.
 
 ## Local Setup
@@ -32,7 +33,11 @@ Draft audit, support, and privacy page:
 
 - `site/apple-audit-page/index.html`
 
-Publish this content under `https://jamesyyy.com/classic-music-journey/` before App Store submission, then use that URL for the App Store Connect Support URL and Privacy Policy URL.
+Public product preview page:
+
+- `site/classic-music-journey/index.html`
+
+Publish the product page under `https://jamesyyy.com/classic-music-journey/` before App Store submission, then use a stable support/privacy URL on `jamesyyy.com` for App Store Connect.
 
 ## China Release Notes
 

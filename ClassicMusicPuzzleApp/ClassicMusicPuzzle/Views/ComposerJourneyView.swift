@@ -21,6 +21,7 @@ struct ComposerJourneyView: View {
                         ArtQuoteView(composer: composer, language: language)
                         ImmersivePoemView(composer: composer, language: language)
                         FilmReferenceStrip(composer: composer, language: language)
+                        AboutJamesView(composer: composer, language: language)
                     }
                     .frame(maxWidth: .infinity)
                 }
@@ -274,6 +275,64 @@ private struct FilmReference: Identifiable {
     let id: String
     let shortTitle: String
     let year: String
+}
+
+private struct AboutJamesView: View {
+    let composer: Composer
+    let language: AppLanguage
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(localized("About James Yuan", "关于 James Yuan"))
+                .font(.caption.weight(.bold))
+                .foregroundStyle(composer.color)
+
+            Text(localized(
+                "James Yuan loves classical music and is dedicated to introducing it to more listeners. He also follows music technology closely, believing that thoughtful technology can help more people feel the beauty of classical music.",
+                "James Yuan 热爱古典音乐，致力于推广古典音乐，同时关注音乐科技。他相信通过有温度的科技，可以让更多人感受古典音乐的美好。"
+            ))
+            .font(.footnote)
+            .lineSpacing(5)
+            .foregroundStyle(.primary.opacity(0.88))
+
+            Link(destination: URL(string: "https://www.jamesyyy.com")!) {
+                HStack(spacing: 6) {
+                    Text(localized("Learn more at www.jamesyyy.com", "了解更多 James Yuan：www.jamesyyy.com"))
+                    Image(systemName: "arrow.up.right")
+                        .font(.caption2.weight(.bold))
+                }
+                .font(.footnote.weight(.bold))
+                .foregroundStyle(composer.color)
+            }
+        }
+        .padding(20)
+        .background(.white.opacity(0.30))
+        .clipShape(RoundedRectangle(cornerRadius: 4))
+        .overlay(alignment: .top) {
+            Rectangle()
+                .fill(classicalLineGradient)
+                .frame(height: 1)
+        }
+        .overlay(alignment: .bottom) {
+            Rectangle()
+                .fill(classicalLineGradient)
+                .frame(height: 1)
+        }
+        .padding(.horizontal, 20)
+        .padding(.bottom, 28)
+    }
+
+    private func localized(_ english: String, _ simplifiedChinese: String) -> String {
+        language == .english ? english : simplifiedChinese
+    }
+
+    private var classicalLineGradient: LinearGradient {
+        LinearGradient(
+            colors: [.clear, composer.color.opacity(0.28), .clear],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+    }
 }
 
 private enum FilmReferenceLibrary {
