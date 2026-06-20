@@ -203,7 +203,7 @@ private struct ImmersivePoemView: View {
                         .foregroundStyle(composer.color)
 
                     Text(poem.title)
-                        .font(.system(size: 34, weight: .black, design: .serif))
+                        .font(.system(size: 26, weight: .bold, design: .serif))
                         .foregroundStyle(.primary)
 
                     Text(poem.author)
@@ -214,9 +214,9 @@ private struct ImmersivePoemView: View {
                 VStack(alignment: .leading, spacing: 14) {
                     ForEach(Array(poem.lines.enumerated()), id: \.offset) { index, line in
                         Text(line)
-                            .font(.system(size: language == .english ? 30 : 36, weight: .black, design: .serif))
+                            .font(.system(size: language == .english ? 22 : 25, weight: .semibold, design: .serif))
                             .italic()
-                            .lineSpacing(10)
+                            .lineSpacing(7)
                             .foregroundStyle(.primary.opacity(index < visibleCount ? 0.96 : 0.0))
                             .blur(radius: index < visibleCount ? 0 : 8)
                             .offset(y: index < visibleCount ? 0 : 10)
@@ -229,8 +229,8 @@ private struct ImmersivePoemView: View {
                     .font(.footnote.weight(.medium))
                     .foregroundStyle(.secondary)
             }
-            .padding(28)
-            .frame(maxWidth: .infinity, minHeight: 390, alignment: .topLeading)
+            .padding(24)
+            .frame(maxWidth: .infinity, minHeight: 340, alignment: .topLeading)
             .background(
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
