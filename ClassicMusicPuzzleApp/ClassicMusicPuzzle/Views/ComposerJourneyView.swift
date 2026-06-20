@@ -5,6 +5,7 @@ struct ComposerJourneyView: View {
     @AppStorage("app.language") private var languageRawValue = AppLanguage.simplifiedChinese.rawValue
     @State private var composerIndex = 0
     @State private var isAssistantPresented = false
+    @State private var isAboutPresented = false
     @State private var reflections: [ListenerReflection] = []
 
     private var composer: Composer { Composer.catalog[composerIndex] }
@@ -23,7 +24,6 @@ struct ComposerJourneyView: View {
                         ArtQuoteView(composer: composer, language: language)
                         ImmersivePoemView(composer: composer, language: language)
                         ListenerReflectionView(composer: composer, language: language, reflections: $reflections)
-                        AboutJamesView(composer: composer, language: language)
                     }
                     .frame(maxWidth: .infinity)
                 }
@@ -57,6 +57,14 @@ struct ComposerJourneyView: View {
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        isAboutPresented = true
+                    } label: {
+                        Image(systemName: "person.crop.circle")
+                    }
+                    .accessibilityLabel(Text(localized("About James Yuan", "关于 James Yuan")))
+                }
+                ToolbarItem(placement: .topBarTrailing) {
                     Menu(localized("Composer", "音乐家")) {
                         ForEach(Array(Composer.catalog.enumerated()), id: \.element.id) { index, item in
                             Button(item.name.text(for: language)) {
@@ -85,6 +93,10 @@ struct ComposerJourneyView: View {
             .sheet(isPresented: $isAssistantPresented) {
                 ComposerAssistantSheet(composer: composer, language: language)
                     .presentationDetents([.medium, .large])
+            }
+            .sheet(isPresented: $isAboutPresented) {
+                AboutJamesSheet(language: language)
+                    .presentationDetents([.medium])
             }
         }
     }
@@ -708,61 +720,95 @@ private struct ComposerHeaderView: View {
     }
 }
 
-private struct AboutJamesView: View {
-    let composer: Composer
+private struct AboutJamesSheet: View {
     let language: AppLanguage
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(localized("About James Yuan", "关于 James Yuan"))
-                .font(.caption.weight(.bold))
-                .foregroundStyle(composer.color)
+        NavigationStack {
+            ZStack {
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.98, green: 0.96, blue: 0.90),
+                        Color(red: 0.90, green: 0.86, blue: 0.76)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
 
-            Text(localized(
-                "James Yuan loves classical music and is dedicated to introducing it to more listeners. He also follows music technology closely, believing that thoughtful technology can help more people feel the beauty of classical music.",
-                "James Yuan 热爱古典音乐，致力于推广古典音乐，同时关注音乐科技。他相信通过有温度的科技，可以让更多人感受古典音乐的美好。"
-            ))
-            .font(.footnote)
-            .lineSpacing(5)
-            .foregroundStyle(.primary.opacity(0.88))
+                VStack(alignment: .leading, spacing: 20) {
+                    HStack(spacing: 14) {
+                        ZStack {
+                            Circle()
+                                .fill(Color(red: 0.58, green: 0.22, blue: 0.18))
+                            Text("J")
+                                .font(.system(size: 34, weight: .black, design: .serif))
+                                .foregroundStyle(.white)
+                        }
+                        .frame(width: 72, height: 72)
+                        .overlay {
+                            Circle()
+                                .stroke(.white.opacity(0.78), lineWidth: 2)
+                        }
 
-            Link(destination: URL(string: "https://www.jamesyyy.com")!) {
-                HStack(spacing: 6) {
-                    Text(localized("Learn more at www.jamesyyy.com", "了解更多 James Yuan：www.jamesyyy.com"))
-                    Image(systemName: "arrow.up.right")
-                        .font(.caption2.weight(.bold))
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("James Yuan")
+                                .font(.system(size: 30, weight: .black, design: .serif))
+                            Text(localized("Classical music advocate", "古典音乐推广者"))
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+
+                    DecorativeDividerStatic()
+
+                    Text(localized(
+                        "James Yuan loves classical music and is dedicated to introducing it to more listeners. He also follows music technology closely, believing that thoughtful technology can help more people feel the beauty of classical music.",
+                        "James Yuan 热爱古典音乐，致力于推广古典音乐，同时关注音乐科技。他相信通过有温度的科技，可以让更多人感受古典音乐的美好。"
+                    ))
+                    .font(.body)
+                    .lineSpacing(6)
+                    .foregroundStyle(.primary.opacity(0.9))
+
+                    Link(destination: URL(string: "https://www.jamesyyy.com")!) {
+                        HStack(spacing: 8) {
+                            Text(localized("Learn more at www.jamesyyy.com", "了解更多 James Yuan：www.jamesyyy.com"))
+                            Image(systemName: "arrow.up.right")
+                                .font(.caption.weight(.bold))
+                        }
+                        .font(.footnote.weight(.bold))
+                        .foregroundStyle(Color(red: 0.58, green: 0.22, blue: 0.18))
+                    }
+
+                    Spacer()
                 }
-                .font(.footnote.weight(.bold))
-                .foregroundStyle(composer.color)
+                .padding(24)
+            }
+            .navigationTitle(localized("About", "关于"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(localized("Done", "完成")) {
+                        dismiss()
+                    }
+                }
             }
         }
-        .padding(20)
-        .background(.white.opacity(0.30))
-        .clipShape(RoundedRectangle(cornerRadius: 4))
-        .overlay(alignment: .top) {
-            Rectangle()
-                .fill(classicalLineGradient)
-                .frame(height: 1)
-        }
-        .overlay(alignment: .bottom) {
-            Rectangle()
-                .fill(classicalLineGradient)
-                .frame(height: 1)
-        }
-        .padding(.horizontal, 20)
-        .padding(.bottom, 28)
     }
 
     private func localized(_ english: String, _ simplifiedChinese: String) -> String {
         language == .english ? english : simplifiedChinese
     }
+}
 
-    private var classicalLineGradient: LinearGradient {
-        LinearGradient(
-            colors: [.clear, composer.color.opacity(0.28), .clear],
-            startPoint: .leading,
-            endPoint: .trailing
-        )
+private struct DecorativeDividerStatic: View {
+    var body: some View {
+        Text("-  ❦  -")
+            .font(.system(size: 15, weight: .bold, design: .serif))
+            .tracking(1.4)
+            .foregroundStyle(Color(red: 0.58, green: 0.22, blue: 0.18).opacity(0.78))
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
