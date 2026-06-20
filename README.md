@@ -1,19 +1,19 @@
 # Classic Music Journey
 
-Free iOS app for introducing classical composers through short poetic listening pages, famous public-domain musical themes, and immersive poem reveals.
+Free iOS app for introducing classical composers through short poetic listening pages, famous public-domain piano themes, and immersive poem reveals.
 
 ## Product Shape
 
 - Native SwiftUI iOS app.
 - English and Simplified Chinese app content with an in-app language switcher.
 - No ads, no accounts, no analytics, no tracking, and no in-app purchases.
-- Composer pages include a short introduction, a portrait, a famous public-domain theme, and a matching poem.
+- Composer pages include a short introduction, a portrait, a famous public-domain piano theme, and a matching poem.
 - The first catalog prepares 30 bilingual composer themes.
 - Chinese mode uses fitting classical Chinese poems; English mode uses public-domain Western poems.
 - Users swipe left or right to move to the previous or next composer page.
 - Poem lines gradually fade in as the music plays.
 - The app includes an About James Yuan section linking to `https://www.jamesyyy.com`.
-- Music playback uses synthesized note data instead of bundled recordings to avoid separate recording rights.
+- Music playback uses synthesized piano-style note data instead of bundled recordings to avoid separate recording rights.
 
 ## Local Setup
 

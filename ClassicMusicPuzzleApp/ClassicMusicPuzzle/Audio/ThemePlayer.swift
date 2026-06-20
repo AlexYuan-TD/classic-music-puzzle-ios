@@ -9,6 +9,7 @@ final class ThemePlayer: ObservableObject {
     private let frequencyLock = NSLock()
     private var phase = 0.0
     private var currentFrequency = 0.0
+    private var noteSampleAge = 0.0
     private var playbackTask: Task<Void, Never>?
 
     init() {
@@ -16,14 +17,30 @@ final class ThemePlayer: ObservableObject {
             guard let self else { return noErr }
             let ablPointer = UnsafeMutableAudioBufferListPointer(audioBufferList)
             let sampleRate = 44_100.0
-            let frequency = self.frequency()
-            let amplitude = frequency == 0 ? 0.0 : 0.14
 
+            self.frequencyLock.lock()
+            defer { self.frequencyLock.unlock() }
             for frame in 0..<Int(frameCount) {
-                let sample = Float(sin(self.phase) * amplitude)
-                self.phase += 2.0 * .pi * frequency / sampleRate
-                if self.phase > 2.0 * .pi {
-                    self.phase -= 2.0 * .pi
+                let frequency = self.currentFrequency
+                let sample: Float
+                if frequency == 0 {
+                    sample = 0
+                } else {
+                    let age = self.noteSampleAge / sampleRate
+                    let attack = min(1.0, age / 0.012)
+                    let decay = exp(-age * 2.7)
+                    let envelope = attack * decay
+                    let tone =
+                        sin(self.phase) * 0.72 +
+                        sin(self.phase * 2.0) * 0.20 +
+                        sin(self.phase * 3.0) * 0.08
+                    sample = Float(tone * envelope * 0.18)
+
+                    self.phase += 2.0 * .pi * frequency / sampleRate
+                    self.noteSampleAge += 1
+                    if self.phase > 2.0 * .pi {
+                        self.phase -= 2.0 * .pi
+                    }
                 }
                 for buffer in ablPointer {
                     let pointer = buffer.mData?.assumingMemoryBound(to: Float.self)
@@ -77,15 +94,11 @@ final class ThemePlayer: ObservableObject {
         isPlaying = false
     }
 
-    private func frequency() -> Double {
-        frequencyLock.lock()
-        defer { frequencyLock.unlock() }
-        return currentFrequency
-    }
-
     private func setFrequency(_ frequency: Double) {
         frequencyLock.lock()
         currentFrequency = frequency
+        noteSampleAge = 0
+        phase = 0
         frequencyLock.unlock()
     }
 }

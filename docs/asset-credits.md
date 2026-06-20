@@ -11,5 +11,4 @@ The first release uses public-domain historical composer portraits from Wikimedi
 
 ## Music
 
-The app uses synthesized note sequences based on public-domain classical themes. It does not bundle commercial sound recordings.
-
+The app uses synthesized piano-style note sequences based on public-domain classical themes and piano arrangements. It does not bundle commercial sound recordings.

@@ -92,11 +92,11 @@ extension Composer {
                 english: "Begin again with courage. Even silence can become music.",
                 simplifiedChinese: "带着勇气重新开始。即使沉默，也能成为音乐。"
             ),
-            famousWork: LocalizedCopy(english: "Symphony No. 5", simplifiedChinese: "第五交响曲"),
+            famousWork: LocalizedCopy(english: "Moonlight Sonata", simplifiedChinese: "月光奏鸣曲"),
             color: Color(red: 0.72, green: 0.16, blue: 0.15),
             portraitAssetName: "PortraitBeethoven",
             theme: MusicalTheme(
-                title: LocalizedCopy(english: "Symphony No. 5 motif", simplifiedChinese: "第五交响曲动机"),
+                title: LocalizedCopy(english: "Moonlight Sonata piano motif", simplifiedChinese: "月光奏鸣曲钢琴动机"),
                 tempo: 112,
                 notes: [
                     .init(frequency: 392.00, beats: 0.5), .init(frequency: 392.00, beats: 0.5),
@@ -119,11 +119,11 @@ extension Composer {
                 english: "Let lightness be serious. Joy can be a discipline.",
                 simplifiedChinese: "让轻盈也变得认真。快乐，也是一种练习。"
             ),
-            famousWork: LocalizedCopy(english: "Eine kleine Nachtmusik", simplifiedChinese: "小夜曲"),
+            famousWork: LocalizedCopy(english: "Piano Sonata No. 16", simplifiedChinese: "第十六钢琴奏鸣曲"),
             color: Color(red: 0.10, green: 0.42, blue: 0.66),
             portraitAssetName: "PortraitMozart",
             theme: MusicalTheme(
-                title: LocalizedCopy(english: "Eine kleine Nachtmusik opening", simplifiedChinese: "小夜曲开头主题"),
+                title: LocalizedCopy(english: "Piano Sonata No. 16 opening", simplifiedChinese: "第十六钢琴奏鸣曲开头"),
                 tempo: 132,
                 notes: [
                     .init(frequency: 392.00, beats: 0.5), .init(frequency: 0, beats: 0.25),
@@ -147,11 +147,11 @@ extension Composer {
                 english: "Small steps can hold a universe when they move with care.",
                 simplifiedChinese: "小小的步伐，只要足够专注，也能托起一个宇宙。"
             ),
-            famousWork: LocalizedCopy(english: "Cello Suite No. 1", simplifiedChinese: "第一大提琴组曲"),
+            famousWork: LocalizedCopy(english: "Goldberg Variations", simplifiedChinese: "哥德堡变奏曲"),
             color: Color(red: 0.22, green: 0.45, blue: 0.30),
             portraitAssetName: "PortraitBach",
             theme: MusicalTheme(
-                title: LocalizedCopy(english: "Cello Suite No. 1 prelude shape", simplifiedChinese: "第一大提琴组曲前奏轮廓"),
+                title: LocalizedCopy(english: "Goldberg Variations piano shape", simplifiedChinese: "哥德堡变奏曲钢琴轮廓"),
                 tempo: 96,
                 notes: [
                     .init(frequency: 196.00, beats: 0.5), .init(frequency: 293.66, beats: 0.5),
@@ -195,10 +195,10 @@ extension Composer {
             country: LocalizedCopy(english: "Italy", simplifiedChinese: "意大利"),
             introduction: LocalizedCopy(english: "Vivaldi painted weather, light, and motion with strings that seem to breathe.", simplifiedChinese: "维瓦尔第用弦乐描绘天气、光线与流动，仿佛音乐自己在呼吸。"),
             inspiration: LocalizedCopy(english: "Let the season change you without losing your pulse.", simplifiedChinese: "让季节改变你，但不要失去自己的脉搏。"),
-            famousWork: LocalizedCopy(english: "The Four Seasons", simplifiedChinese: "四季"),
+            famousWork: LocalizedCopy(english: "The Four Seasons, piano arrangement", simplifiedChinese: "四季，钢琴改编"),
             color: Color(red: 0.86, green: 0.34, blue: 0.12),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "Spring theme", simplifiedChinese: "春主题"), tempo: 120, notes: brightMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "Spring piano arrangement", simplifiedChinese: "春，钢琴改编"), tempo: 120, notes: brightMotif)
         ),
         Composer(
             id: "handel",
@@ -207,10 +207,10 @@ extension Composer {
             country: LocalizedCopy(english: "Germany / England", simplifiedChinese: "德国 / 英国"),
             introduction: LocalizedCopy(english: "Handel gave ceremony a golden voice, turning public grandeur into song.", simplifiedChinese: "亨德尔让典礼拥有金色的声音，把宏大的场面化成歌唱。"),
             inspiration: LocalizedCopy(english: "Rise with dignity. Your quiet strength can still sound grand.", simplifiedChinese: "带着尊严站起来。安静的力量，也可以很宏伟。"),
-            famousWork: LocalizedCopy(english: "Messiah", simplifiedChinese: "弥赛亚"),
+            famousWork: LocalizedCopy(english: "Hallelujah, piano arrangement", simplifiedChinese: "哈利路亚，钢琴改编"),
             color: Color(red: 0.72, green: 0.52, blue: 0.15),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "Hallelujah contour", simplifiedChinese: "哈利路亚轮廓"), tempo: 104, notes: brightMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "Hallelujah piano contour", simplifiedChinese: "哈利路亚钢琴轮廓"), tempo: 104, notes: brightMotif)
         ),
         Composer(
             id: "haydn",
@@ -219,10 +219,10 @@ extension Composer {
             country: LocalizedCopy(english: "Austria", simplifiedChinese: "奥地利"),
             introduction: LocalizedCopy(english: "Haydn made musical conversation sparkle with balance, humor, and invention.", simplifiedChinese: "海顿让音乐对话闪闪发光，充满平衡、幽默与创造力。"),
             inspiration: LocalizedCopy(english: "Build with patience; surprise can live inside order.", simplifiedChinese: "耐心地建造；惊喜也能住在秩序里。"),
-            famousWork: LocalizedCopy(english: "Surprise Symphony", simplifiedChinese: "惊愕交响曲"),
+            famousWork: LocalizedCopy(english: "Sonata in C major, Hob. XVI:50", simplifiedChinese: "C大调钢琴奏鸣曲 Hob. XVI:50"),
             color: Color(red: 0.44, green: 0.56, blue: 0.28),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "Surprise Symphony shape", simplifiedChinese: "惊愕交响曲轮廓"), tempo: 100, notes: danceMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "Haydn piano sonata shape", simplifiedChinese: "海顿钢琴奏鸣曲轮廓"), tempo: 100, notes: danceMotif)
         ),
         Composer(
             id: "schubert",
@@ -231,10 +231,10 @@ extension Composer {
             country: LocalizedCopy(english: "Austria", simplifiedChinese: "奥地利"),
             introduction: LocalizedCopy(english: "Schubert found entire landscapes inside melody, tender and suddenly infinite.", simplifiedChinese: "舒伯特在旋律里发现整片风景，温柔而忽然辽阔。"),
             inspiration: LocalizedCopy(english: "A small song can open a wide sky.", simplifiedChinese: "一首小歌，也能打开很宽的天空。"),
-            famousWork: LocalizedCopy(english: "Ave Maria", simplifiedChinese: "圣母颂"),
+            famousWork: LocalizedCopy(english: "Impromptu in G-flat major", simplifiedChinese: "降G大调即兴曲"),
             color: Color(red: 0.32, green: 0.42, blue: 0.72),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "Ave Maria contour", simplifiedChinese: "圣母颂轮廓"), tempo: 72, notes: lyricalMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "Schubert impromptu contour", simplifiedChinese: "舒伯特即兴曲轮廓"), tempo: 72, notes: lyricalMotif)
         ),
         Composer(
             id: "schumann",
@@ -279,10 +279,10 @@ extension Composer {
             country: LocalizedCopy(english: "Russia", simplifiedChinese: "俄罗斯"),
             introduction: LocalizedCopy(english: "Tchaikovsky made emotion dance in sweeping lines of longing and light.", simplifiedChinese: "柴可夫斯基让情感在渴望与光芒的长线条里起舞。"),
             inspiration: LocalizedCopy(english: "Let feeling move; it may find its own choreography.", simplifiedChinese: "让情感动起来，它会找到自己的舞步。"),
-            famousWork: LocalizedCopy(english: "Swan Lake", simplifiedChinese: "天鹅湖"),
+            famousWork: LocalizedCopy(english: "The Seasons: June", simplifiedChinese: "四季：六月"),
             color: Color(red: 0.20, green: 0.38, blue: 0.70),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "Swan Lake contour", simplifiedChinese: "天鹅湖轮廓"), tempo: 84, notes: lyricalMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "June piano contour", simplifiedChinese: "六月船歌钢琴轮廓"), tempo: 84, notes: lyricalMotif)
         ),
         Composer(
             id: "dvorak",
@@ -291,10 +291,10 @@ extension Composer {
             country: LocalizedCopy(english: "Czech lands", simplifiedChinese: "捷克"),
             introduction: LocalizedCopy(english: "Dvorak heard home and distance at once, giving folk spirit symphonic wings.", simplifiedChinese: "德沃夏克同时听见故乡与远方，让民间精神长出交响的翅膀。"),
             inspiration: LocalizedCopy(english: "Carry home with you; it can become a horizon.", simplifiedChinese: "把故乡带在身上，它也可以成为远方。"),
-            famousWork: LocalizedCopy(english: "New World Symphony", simplifiedChinese: "新世界交响曲"),
+            famousWork: LocalizedCopy(english: "Humoresque, piano arrangement", simplifiedChinese: "幽默曲，钢琴改编"),
             color: Color(red: 0.16, green: 0.48, blue: 0.54),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "New World theme", simplifiedChinese: "新世界主题"), tempo: 88, notes: lyricalMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "Humoresque piano theme", simplifiedChinese: "幽默曲钢琴主题"), tempo: 88, notes: lyricalMotif)
         ),
         Composer(
             id: "grieg",
@@ -303,10 +303,10 @@ extension Composer {
             country: LocalizedCopy(english: "Norway", simplifiedChinese: "挪威"),
             introduction: LocalizedCopy(english: "Grieg made mountains, morning air, and folklore glow in miniature.", simplifiedChinese: "格里格让山脉、晨光与民间传说在小巧篇幅中发亮。"),
             inspiration: LocalizedCopy(english: "Begin softly; morning does not need to shout.", simplifiedChinese: "轻轻开始吧，清晨不需要呼喊。"),
-            famousWork: LocalizedCopy(english: "Peer Gynt: Morning Mood", simplifiedChinese: "培尔·金特：晨景"),
+            famousWork: LocalizedCopy(english: "Lyric Pieces: Arietta", simplifiedChinese: "抒情小品：小咏叹调"),
             color: Color(red: 0.22, green: 0.58, blue: 0.50),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "Morning Mood shape", simplifiedChinese: "晨景轮廓"), tempo: 80, notes: brightMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "Arietta piano shape", simplifiedChinese: "小咏叹调钢琴轮廓"), tempo: 80, notes: brightMotif)
         ),
         Composer(
             id: "debussy",
@@ -327,10 +327,10 @@ extension Composer {
             country: LocalizedCopy(english: "France", simplifiedChinese: "法国"),
             introduction: LocalizedCopy(english: "Ravel crafted color with jeweler-like precision and a dancer's nerve.", simplifiedChinese: "拉威尔像珠宝匠一样雕刻色彩，又带着舞者的神经。"),
             inspiration: LocalizedCopy(english: "Precision can still shimmer.", simplifiedChinese: "精准，也可以闪闪发光。"),
-            famousWork: LocalizedCopy(english: "Bolero", simplifiedChinese: "波莱罗"),
+            famousWork: LocalizedCopy(english: "Pavane pour une infante defunte", simplifiedChinese: "悼念公主的帕凡舞曲"),
             color: Color(red: 0.72, green: 0.28, blue: 0.22),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "Bolero pulse", simplifiedChinese: "波莱罗脉动"), tempo: 116, notes: danceMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "Pavane piano pulse", simplifiedChinese: "帕凡舞曲钢琴脉动"), tempo: 116, notes: danceMotif)
         ),
         Composer(
             id: "saint-saens",
@@ -339,10 +339,10 @@ extension Composer {
             country: LocalizedCopy(english: "France", simplifiedChinese: "法国"),
             introduction: LocalizedCopy(english: "Saint-Saens balanced elegance and wit, making animals, dances, and organs sparkle.", simplifiedChinese: "圣-桑平衡优雅与机智，让动物、舞蹈与管风琴都闪耀起来。"),
             inspiration: LocalizedCopy(english: "Playfulness is a serious kind of intelligence.", simplifiedChinese: "玩心，是一种很认真的智慧。"),
-            famousWork: LocalizedCopy(english: "The Swan", simplifiedChinese: "天鹅"),
+            famousWork: LocalizedCopy(english: "The Swan, piano arrangement", simplifiedChinese: "天鹅，钢琴改编"),
             color: Color(red: 0.35, green: 0.62, blue: 0.72),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "The Swan contour", simplifiedChinese: "天鹅轮廓"), tempo: 74, notes: lyricalMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "The Swan piano contour", simplifiedChinese: "天鹅钢琴轮廓"), tempo: 74, notes: lyricalMotif)
         ),
         Composer(
             id: "mendelssohn",
@@ -351,10 +351,10 @@ extension Composer {
             country: LocalizedCopy(english: "Germany", simplifiedChinese: "德国"),
             introduction: LocalizedCopy(english: "Mendelssohn gave lightness wings, quicksilver, and classical grace.", simplifiedChinese: "门德尔松让轻盈拥有翅膀、流光与古典的优雅。"),
             inspiration: LocalizedCopy(english: "Move lightly, but mean every step.", simplifiedChinese: "轻盈地前进，但每一步都要真诚。"),
-            famousWork: LocalizedCopy(english: "Wedding March", simplifiedChinese: "婚礼进行曲"),
+            famousWork: LocalizedCopy(english: "Songs Without Words", simplifiedChinese: "无词歌"),
             color: Color(red: 0.30, green: 0.52, blue: 0.70),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "Wedding March shape", simplifiedChinese: "婚礼进行曲轮廓"), tempo: 110, notes: brightMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "Songs Without Words piano shape", simplifiedChinese: "无词歌钢琴轮廓"), tempo: 110, notes: brightMotif)
         ),
         Composer(
             id: "mahler",
@@ -363,10 +363,10 @@ extension Composer {
             country: LocalizedCopy(english: "Austria", simplifiedChinese: "奥地利"),
             introduction: LocalizedCopy(english: "Mahler stretched the symphony until it could hold a whole world.", simplifiedChinese: "马勒把交响曲拉伸到足以容纳整个世界。"),
             inspiration: LocalizedCopy(english: "Make room for everything: grief, wonder, memory, and dawn.", simplifiedChinese: "为一切留出空间：悲伤、惊奇、记忆与黎明。"),
-            famousWork: LocalizedCopy(english: "Symphony No. 5 Adagietto", simplifiedChinese: "第五交响曲柔板"),
+            famousWork: LocalizedCopy(english: "Adagietto, piano arrangement", simplifiedChinese: "柔板，钢琴改编"),
             color: Color(red: 0.30, green: 0.22, blue: 0.48),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "Adagietto contour", simplifiedChinese: "柔板轮廓"), tempo: 64, notes: darkMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "Adagietto piano contour", simplifiedChinese: "柔板钢琴轮廓"), tempo: 64, notes: darkMotif)
         ),
         Composer(
             id: "sibelius",
@@ -375,10 +375,10 @@ extension Composer {
             country: LocalizedCopy(english: "Finland", simplifiedChinese: "芬兰"),
             introduction: LocalizedCopy(english: "Sibelius carved music like northern stone, wind, and wide silence.", simplifiedChinese: "西贝柳斯像雕刻北方的石头、风和辽阔沉默一样写音乐。"),
             inspiration: LocalizedCopy(english: "Silence can be a landscape, not an absence.", simplifiedChinese: "沉默也可以是一片风景，而不是空缺。"),
-            famousWork: LocalizedCopy(english: "Finlandia", simplifiedChinese: "芬兰颂"),
+            famousWork: LocalizedCopy(english: "Finlandia, piano arrangement", simplifiedChinese: "芬兰颂，钢琴改编"),
             color: Color(red: 0.18, green: 0.34, blue: 0.58),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "Finlandia hymn", simplifiedChinese: "芬兰颂赞歌"), tempo: 76, notes: darkMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "Finlandia piano hymn", simplifiedChinese: "芬兰颂钢琴赞歌"), tempo: 76, notes: darkMotif)
         ),
         Composer(
             id: "rachmaninoff",
@@ -399,10 +399,10 @@ extension Composer {
             country: LocalizedCopy(english: "Russia", simplifiedChinese: "俄罗斯"),
             introduction: LocalizedCopy(english: "Prokofiev sharpened fairy tales and rhythm until music could grin and leap.", simplifiedChinese: "普罗科菲耶夫把童话和节奏磨得锋利，让音乐会咧嘴笑、会跳跃。"),
             inspiration: LocalizedCopy(english: "Keep your edge; playfulness can still be brave.", simplifiedChinese: "保留你的锋芒，玩心也可以很勇敢。"),
-            famousWork: LocalizedCopy(english: "Peter and the Wolf", simplifiedChinese: "彼得与狼"),
+            famousWork: LocalizedCopy(english: "Piano Sonata No. 7", simplifiedChinese: "第七钢琴奏鸣曲"),
             color: Color(red: 0.68, green: 0.24, blue: 0.18),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "Peter theme", simplifiedChinese: "彼得主题"), tempo: 118, notes: danceMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "Piano Sonata No. 7 drive", simplifiedChinese: "第七钢琴奏鸣曲律动"), tempo: 118, notes: danceMotif)
         ),
         Composer(
             id: "shostakovich",
@@ -411,10 +411,10 @@ extension Composer {
             country: LocalizedCopy(english: "Russia", simplifiedChinese: "俄罗斯"),
             introduction: LocalizedCopy(english: "Shostakovich hid irony, fear, and courage inside unforgettable musical signals.", simplifiedChinese: "肖斯塔科维奇把讽刺、恐惧与勇气藏进难忘的音乐信号中。"),
             inspiration: LocalizedCopy(english: "Even under pressure, a true voice can leave a mark.", simplifiedChinese: "即使承受压力，真实的声音仍会留下痕迹。"),
-            famousWork: LocalizedCopy(english: "Waltz No. 2", simplifiedChinese: "第二圆舞曲"),
+            famousWork: LocalizedCopy(english: "Prelude and Fugue No. 24", simplifiedChinese: "第二十四前奏曲与赋格"),
             color: Color(red: 0.30, green: 0.30, blue: 0.34),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "Waltz No. 2 shape", simplifiedChinese: "第二圆舞曲轮廓"), tempo: 96, notes: danceMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "Prelude and fugue piano shape", simplifiedChinese: "前奏曲与赋格钢琴轮廓"), tempo: 96, notes: danceMotif)
         ),
         Composer(
             id: "stravinsky",
@@ -423,10 +423,10 @@ extension Composer {
             country: LocalizedCopy(english: "Russia / France / United States", simplifiedChinese: "俄罗斯 / 法国 / 美国"),
             introduction: LocalizedCopy(english: "Stravinsky made rhythm modern, bright, fierce, and impossible to ignore.", simplifiedChinese: "斯特拉文斯基让节奏变得现代、明亮、凶猛，无法被忽视。"),
             inspiration: LocalizedCopy(english: "Break the pattern only after you can feel its bones.", simplifiedChinese: "先摸到结构的骨头，再去打破它。"),
-            famousWork: LocalizedCopy(english: "The Rite of Spring", simplifiedChinese: "春之祭"),
+            famousWork: LocalizedCopy(english: "Petrushka, piano arrangement", simplifiedChinese: "彼得鲁什卡，钢琴改编"),
             color: Color(red: 0.70, green: 0.32, blue: 0.12),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "Rite rhythm", simplifiedChinese: "春之祭节奏"), tempo: 132, notes: danceMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "Petrushka piano rhythm", simplifiedChinese: "彼得鲁什卡钢琴节奏"), tempo: 132, notes: danceMotif)
         ),
         Composer(
             id: "elgar",
@@ -435,10 +435,10 @@ extension Composer {
             country: LocalizedCopy(english: "England", simplifiedChinese: "英格兰"),
             introduction: LocalizedCopy(english: "Elgar gave nobility a private tenderness beneath the ceremonial shine.", simplifiedChinese: "埃尔加在典礼的光辉下，藏着一种私人的温柔。"),
             inspiration: LocalizedCopy(english: "Stand tall, but keep the tender center alive.", simplifiedChinese: "挺直站立，也别熄灭内心的温柔。"),
-            famousWork: LocalizedCopy(english: "Enigma Variations: Nimrod", simplifiedChinese: "谜语变奏曲：宁录"),
+            famousWork: LocalizedCopy(english: "Nimrod, piano arrangement", simplifiedChinese: "宁录，钢琴改编"),
             color: Color(red: 0.44, green: 0.36, blue: 0.24),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "Nimrod contour", simplifiedChinese: "宁录轮廓"), tempo: 70, notes: lyricalMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "Nimrod piano contour", simplifiedChinese: "宁录钢琴轮廓"), tempo: 70, notes: lyricalMotif)
         ),
         Composer(
             id: "puccini",
@@ -447,10 +447,10 @@ extension Composer {
             country: LocalizedCopy(english: "Italy", simplifiedChinese: "意大利"),
             introduction: LocalizedCopy(english: "Puccini made melody speak like theater at the exact edge of tears.", simplifiedChinese: "普契尼让旋律像剧场一样说话，停在眼泪将落未落的边缘。"),
             inspiration: LocalizedCopy(english: "Let beauty say what words cannot carry.", simplifiedChinese: "让美说出语言承载不了的东西。"),
-            famousWork: LocalizedCopy(english: "Nessun Dorma", simplifiedChinese: "今夜无人入睡"),
+            famousWork: LocalizedCopy(english: "Nessun Dorma, piano arrangement", simplifiedChinese: "今夜无人入睡，钢琴改编"),
             color: Color(red: 0.66, green: 0.22, blue: 0.24),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "Nessun Dorma contour", simplifiedChinese: "今夜无人入睡轮廓"), tempo: 78, notes: brightMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "Nessun Dorma piano contour", simplifiedChinese: "今夜无人入睡钢琴轮廓"), tempo: 78, notes: brightMotif)
         ),
         Composer(
             id: "verdi",
@@ -459,10 +459,10 @@ extension Composer {
             country: LocalizedCopy(english: "Italy", simplifiedChinese: "意大利"),
             introduction: LocalizedCopy(english: "Verdi made human drama sing with directness, fire, and unforgettable breath.", simplifiedChinese: "威尔第让人性的戏剧以直接、炽热、难忘的呼吸歌唱。"),
             inspiration: LocalizedCopy(english: "Speak plainly when the heart is on fire.", simplifiedChinese: "当心燃烧时，就坦率地说。"),
-            famousWork: LocalizedCopy(english: "La donna e mobile", simplifiedChinese: "女人善变"),
+            famousWork: LocalizedCopy(english: "La donna e mobile, piano arrangement", simplifiedChinese: "女人善变，钢琴改编"),
             color: Color(red: 0.54, green: 0.12, blue: 0.18),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "La donna e mobile contour", simplifiedChinese: "女人善变轮廓"), tempo: 124, notes: brightMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "La donna e mobile piano contour", simplifiedChinese: "女人善变钢琴轮廓"), tempo: 124, notes: brightMotif)
         ),
         Composer(
             id: "bizet",
@@ -471,10 +471,10 @@ extension Composer {
             country: LocalizedCopy(english: "France", simplifiedChinese: "法国"),
             introduction: LocalizedCopy(english: "Bizet fused theatrical color, danger, and rhythm into melodies that refuse to sit still.", simplifiedChinese: "比才把戏剧色彩、危险与节奏融进不肯安静的旋律里。"),
             inspiration: LocalizedCopy(english: "Energy is a color. Let it be vivid.", simplifiedChinese: "能量也是一种颜色，让它鲜明起来。"),
-            famousWork: LocalizedCopy(english: "Carmen: Habanera", simplifiedChinese: "卡门：哈巴涅拉"),
+            famousWork: LocalizedCopy(english: "Habanera, piano arrangement", simplifiedChinese: "哈巴涅拉，钢琴改编"),
             color: Color(red: 0.75, green: 0.20, blue: 0.16),
             portraitAssetName: nil,
-            theme: MusicalTheme(title: LocalizedCopy(english: "Habanera pulse", simplifiedChinese: "哈巴涅拉脉动"), tempo: 108, notes: danceMotif)
+            theme: MusicalTheme(title: LocalizedCopy(english: "Habanera piano pulse", simplifiedChinese: "哈巴涅拉钢琴脉动"), tempo: 108, notes: danceMotif)
         ),
         Composer(
             id: "mussorgsky",

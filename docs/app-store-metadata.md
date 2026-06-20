@@ -44,7 +44,7 @@ Simplified Chinese:
 功能：
 - 30 个中英文音乐家主题
 - 支持中文与 English
-- 合成公版古典旋律
+- 合成钢琴风格公版古典旋律
 - 音乐家肖像或优雅主题占位图
 - 随音乐逐渐浮现的诗歌
 - 左右滑动切换音乐家
@@ -54,11 +54,11 @@ Simplified Chinese:
 
 English:
 
-classical,music,composer,poetry,piano,symphony,bach,mozart,beethoven,chopin
+classical,music,composer,poetry,piano,bach,mozart,beethoven,chopin
 
 Simplified Chinese:
 
-古典音乐,作曲家,诗歌,贝多芬,莫扎特,巴赫,肖邦,交响曲,音乐欣赏
+古典音乐,作曲家,诗歌,贝多芬,莫扎特,巴赫,肖邦,钢琴,音乐欣赏
 
 ## Category
 
@@ -72,5 +72,4 @@ No user-generated public content, no accounts, no ads, no purchases, no unrestri
 
 ## Review Notes
 
-The app is free and offline-first. It does not collect user data, does not use analytics or advertising SDKs, and does not require an account. Music is generated from synthesized note sequences based on public-domain compositions; no commercial sound recordings are bundled.
-
+The app is free and offline-first. It does not collect user data, does not use analytics or advertising SDKs, and does not require an account. Music is generated from synthesized piano-style note sequences based on public-domain compositions and piano arrangements; no commercial sound recordings are bundled.
