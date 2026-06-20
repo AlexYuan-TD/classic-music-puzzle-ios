@@ -282,7 +282,12 @@ private struct ArtQuoteView: View {
             .padding(.horizontal, 24)
             .padding(.vertical, 20)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(.white.opacity(0.34))
+            .overlay(alignment: .leading) {
+                Rectangle()
+                    .fill(composer.color.opacity(0.72))
+                    .frame(width: 3)
+                    .padding(.vertical, 18)
+            }
     }
 }
 
@@ -337,17 +342,16 @@ private struct ImmersivePoemView: View {
             .padding(24)
             .frame(maxWidth: .infinity, minHeight: 340, alignment: .top)
             .background(
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(.white.opacity(0.50))
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(composer.color.opacity(0.12))
-                }
+                LinearGradient(
+                    colors: [
+                        .white.opacity(0.18),
+                        composer.color.opacity(0.10),
+                        .white.opacity(0.04)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
             )
-            .overlay {
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(.white.opacity(0.42), lineWidth: 1)
-            }
             .padding(20)
             .onChange(of: composer) { _, _ in
                 startDate = Date()
