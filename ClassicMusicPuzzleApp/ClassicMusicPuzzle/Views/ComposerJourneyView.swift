@@ -331,6 +331,7 @@ private struct ListenerReflectionView: View {
     let language: AppLanguage
     @Binding var reflections: [ListenerReflection]
     @State private var draft = ""
+    @State private var isExpanded = false
     @State private var visibility = ReflectionVisibility.privateOnly
 
     private var composerReflections: [ListenerReflection] {
@@ -339,55 +340,93 @@ private struct ListenerReflectionView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            HStack(alignment: .top, spacing: 12) {
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(localized("What did the music awaken?", "这段音乐让你想到了什么？"))
-                        .font(.caption.weight(.bold))
+            Button {
+                withAnimation(.easeInOut(duration: 0.22)) {
+                    isExpanded.toggle()
+                }
+            } label: {
+                HStack(spacing: 10) {
+                    Image(systemName: isExpanded ? "text.bubble.fill" : "text.bubble")
+                        .font(.system(size: 16, weight: .bold))
                         .foregroundStyle(composer.color)
 
-                    Text(localized(
-                        "Leave a private note, or mark it public for the future community wall.",
-                        "写一段只给自己看的听后感，或标记为公开，未来进入公共留言墙。"
-                    ))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(localized("Leave a reflection", "留下听后感"))
+                            .font(.footnote.weight(.heavy))
+                            .foregroundStyle(.primary)
+
+                        Text(reflectionSummary)
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Spacer()
+
+                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(.secondary)
                 }
-
-                Spacer()
-            }
-
-            TextField(localized("A memory, an image, a sentence...", "一段记忆、一个画面、一句话……"), text: $draft, axis: .vertical)
-                .textFieldStyle(.plain)
-                .lineLimit(3...6)
-                .padding(14)
-                .background(.white.opacity(0.42))
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .padding(.horizontal, 14)
+                .padding(.vertical, 11)
+                .background(.white.opacity(0.34))
+                .clipShape(Capsule())
                 .overlay {
-                    RoundedRectangle(cornerRadius: 8)
+                    Capsule()
                         .stroke(composer.color.opacity(0.18), lineWidth: 1)
                 }
-
-            Picker(localized("Visibility", "可见范围"), selection: $visibility) {
-                ForEach(ReflectionVisibility.allCases) { item in
-                    Text(item.title(for: language)).tag(item)
-                }
             }
-            .pickerStyle(.segmented)
+            .buttonStyle(.plain)
 
-            HStack {
-                Text(visibility.description(for: language))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+            if isExpanded {
+                VStack(alignment: .leading, spacing: 14) {
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text(localized("What did the music awaken?", "这段音乐让你想到了什么？"))
+                            .font(.caption.weight(.bold))
+                            .foregroundStyle(composer.color)
 
-                Spacer()
+                        Text(localized(
+                            "Leave a private note, or mark it public for the future community wall.",
+                            "写一段只给自己看的听后感，或标记为公开，未来进入公共留言墙。"
+                        ))
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                    }
 
-                Button(localized("Save", "保存")) {
-                    save()
+                    TextField(localized("A memory, an image, a sentence...", "一段记忆、一个画面、一句话……"), text: $draft, axis: .vertical)
+                        .textFieldStyle(.plain)
+                        .lineLimit(3...6)
+                        .padding(14)
+                        .background(.white.opacity(0.42))
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(composer.color.opacity(0.18), lineWidth: 1)
+                        }
+
+                    Picker(localized("Visibility", "可见范围"), selection: $visibility) {
+                        ForEach(ReflectionVisibility.allCases) { item in
+                            Text(item.title(for: language)).tag(item)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+
+                    HStack {
+                        Text(visibility.description(for: language))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+
+                        Spacer()
+
+                        Button(localized("Save", "保存")) {
+                            save()
+                        }
+                        .font(.footnote.weight(.bold))
+                        .buttonStyle(.borderedProminent)
+                        .tint(composer.color)
+                        .disabled(draft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    }
                 }
-                .font(.footnote.weight(.bold))
-                .buttonStyle(.borderedProminent)
-                .tint(composer.color)
-                .disabled(draft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                .transition(.opacity.combined(with: .move(edge: .top)))
             }
 
             if !composerReflections.isEmpty {
@@ -429,6 +468,17 @@ private struct ListenerReflectionView: View {
         .padding(.bottom, 22)
     }
 
+    private var reflectionSummary: String {
+        if composerReflections.isEmpty {
+            return localized("Tap when a thought arrives", "有想法时再点开")
+        }
+
+        return localized(
+            "\(composerReflections.count) saved",
+            "已保存 \(composerReflections.count) 条"
+        )
+    }
+
     private func save() {
         let text = draft.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
@@ -438,6 +488,9 @@ private struct ListenerReflectionView: View {
             at: 0
         )
         draft = ""
+        withAnimation(.easeInOut(duration: 0.22)) {
+            isExpanded = false
+        }
     }
 
     private func localized(_ english: String, _ simplifiedChinese: String) -> String {
