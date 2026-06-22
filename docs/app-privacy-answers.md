@@ -28,5 +28,10 @@ The first version should remain offline-first. If future versions add online con
 
 Use after publishing:
 
-`https://jamesyyy.com/classic-music-journey/`
+`https://jamesyyy.com/privacy.html`
 
+## Support URL
+
+Use after publishing:
+
+`https://jamesyyy.com/support.html`

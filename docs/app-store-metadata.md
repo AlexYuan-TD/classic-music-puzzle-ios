@@ -66,6 +66,30 @@ Primary: Music
 
 Secondary: Education
 
+## App Store Connect URLs
+
+Support URL:
+
+`https://jamesyyy.com/support.html`
+
+Privacy Policy URL:
+
+`https://jamesyyy.com/privacy.html`
+
+Marketing URL:
+
+`https://jamesyyy.com/`
+
+## Version
+
+Version: 1.0
+
+Build: 1
+
+Bundle ID:
+
+`com.jamesyyy.classicmusicjourney`
+
 ## Age Rating Notes
 
 No user-generated public content, no accounts, no ads, no purchases, no unrestricted web access.
