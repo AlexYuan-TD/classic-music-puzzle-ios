@@ -84,7 +84,7 @@ Marketing URL:
 
 Version: 1.0
 
-Build: 1
+Build: 3
 
 Bundle ID:
 

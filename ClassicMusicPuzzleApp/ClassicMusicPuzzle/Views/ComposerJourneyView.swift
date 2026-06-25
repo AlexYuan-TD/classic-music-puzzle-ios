@@ -28,21 +28,23 @@ struct ComposerJourneyView: View {
                             ImmersivePoemView(composer: composer, language: language, layout: layout)
                             ListenerReflectionView(composer: composer, language: language, layout: layout, reflections: $reflections)
                         }
+                        .frame(maxWidth: layout.contentMaxWidth)
                         .frame(maxWidth: .infinity)
+                        .padding(.horizontal, layout.contentInset)
                         .padding(.bottom, layout.scrollBottomInset)
                     }
-
-                    VStack {
+                }
+                .safeAreaInset(edge: .bottom) {
+                    HStack {
                         Spacer()
-                        HStack {
-                            Spacer()
-                            ComposerAssistantButton(composer: composer, language: language, layout: layout) {
-                                isAssistantPresented = true
-                            }
+                        ComposerAssistantButton(composer: composer, language: language, layout: layout) {
+                            isAssistantPresented = true
                         }
-                        .padding(.trailing, layout.outerPadding)
-                        .padding(.bottom, layout.outerPadding)
                     }
+                    .frame(maxWidth: layout.contentMaxWidth)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, layout.contentInset + layout.outerPadding)
+                    .padding(.bottom, layout.isCompact ? 8 : 12)
                 }
             }
             .gesture(
@@ -119,12 +121,16 @@ struct ComposerJourneyView: View {
 
 private struct JourneyLayout {
     let isCompact: Bool
+    let isWide: Bool
 
     init(size: CGSize) {
         isCompact = size.width <= 380 || size.height <= 700
+        isWide = size.width >= 700
     }
 
     var outerPadding: CGFloat { isCompact ? 12 : 20 }
+    var contentInset: CGFloat { isWide ? 28 : 0 }
+    var contentMaxWidth: CGFloat { isWide ? 680 : .infinity }
     var sectionPadding: CGFloat { isCompact ? 14 : 20 }
     var portraitSize: CGFloat { isCompact ? 62 : 78 }
     var quoteSizeEnglish: CGFloat { isCompact ? 25 : 32 }
@@ -132,9 +138,9 @@ private struct JourneyLayout {
     var poemTitleSize: CGFloat { isCompact ? 21 : 26 }
     var poemLineSizeEnglish: CGFloat { isCompact ? 18 : 22 }
     var poemLineSizeChinese: CGFloat { isCompact ? 21 : 25 }
-    var poemMinHeight: CGFloat { isCompact ? 250 : 340 }
+    var poemMinHeight: CGFloat { isCompact ? 250 : (isWide ? 300 : 340) }
     var assistantMascotSize: CGFloat { isCompact ? 34 : 42 }
-    var scrollBottomInset: CGFloat { isCompact ? 86 : 104 }
+    var scrollBottomInset: CGFloat { isCompact ? 18 : 24 }
 }
 
 private struct ComposerAssistantButton: View {
@@ -224,28 +230,32 @@ private struct ComposerAssistantSheet: View {
                 PortraitBackgroundView(composer: composer)
 
                 VStack(spacing: 0) {
-                    VStack(spacing: 10) {
-                        ComposerAssistantMascot(composer: composer, size: 62)
-
-                        Text(title)
-                            .font(.system(size: 24, weight: .black, design: .serif))
-                            .multilineTextAlignment(.center)
-
-                        Text(subtitle)
-                            .font(.footnote)
-                            .multilineTextAlignment(.center)
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding(.horizontal, 24)
-                    .padding(.top, 24)
-                    .padding(.bottom, 14)
-
                     ScrollView {
+                        VStack(spacing: 10) {
+                            ComposerAssistantMascot(composer: composer, size: 62)
+
+                            Text(title)
+                                .font(.system(size: 24, weight: .black, design: .serif))
+                                .multilineTextAlignment(.center)
+                                .fixedSize(horizontal: false, vertical: true)
+
+                            Text(subtitle)
+                                .font(.footnote)
+                                .multilineTextAlignment(.center)
+                                .foregroundStyle(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.top, 24)
+                        .padding(.bottom, 14)
+
                         LazyVStack(spacing: 12) {
                             ForEach(activeMessages) { message in
                                 AssistantMessageBubble(message: message, composer: composer)
                             }
                         }
+                        .frame(maxWidth: 620)
+                        .frame(maxWidth: .infinity)
                         .padding(.horizontal, 20)
                         .padding(.vertical, 16)
                     }
@@ -271,6 +281,8 @@ private struct ComposerAssistantSheet: View {
                         .disabled(draft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                     }
                     .padding(16)
+                    .frame(maxWidth: 660)
+                    .frame(maxWidth: .infinity)
                     .background(.ultraThinMaterial)
                 }
             }
@@ -334,6 +346,7 @@ private struct AssistantMessageBubble: View {
             Text(message.text)
                 .font(.body)
                 .lineSpacing(4)
+                .fixedSize(horizontal: false, vertical: true)
                 .padding(13)
                 .foregroundStyle(message.isUser ? .white : .primary)
                 .background(message.isUser ? composer.color.opacity(0.86) : .white.opacity(0.48))
@@ -455,6 +468,7 @@ private struct ListenerReflectionView: View {
                         Text(visibility.description(for: language))
                             .font(.caption)
                             .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
 
                         Spacer()
 
@@ -788,53 +802,60 @@ private struct AboutJamesSheet: View {
                 )
                 .ignoresSafeArea()
 
-                VStack(alignment: .leading, spacing: 20) {
-                    HStack(spacing: 14) {
-                        ZStack {
-                            Circle()
-                                .fill(Color(red: 0.58, green: 0.22, blue: 0.18))
-                            Text("J")
-                                .font(.system(size: 34, weight: .black, design: .serif))
-                                .foregroundStyle(.white)
-                        }
-                        .frame(width: 72, height: 72)
-                        .overlay {
-                            Circle()
-                                .stroke(.white.opacity(0.78), lineWidth: 2)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        HStack(spacing: 14) {
+                            ZStack {
+                                Circle()
+                                    .fill(Color(red: 0.58, green: 0.22, blue: 0.18))
+                                Text("J")
+                                    .font(.system(size: 34, weight: .black, design: .serif))
+                                    .foregroundStyle(.white)
+                            }
+                            .frame(width: 72, height: 72)
+                            .overlay {
+                                Circle()
+                                    .stroke(.white.opacity(0.78), lineWidth: 2)
+                            }
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("James Yuan")
+                                    .font(.system(size: 30, weight: .black, design: .serif))
+                                    .lineLimit(2)
+                                    .minimumScaleFactor(0.82)
+                                Text(localized("Classical music advocate", "古典音乐推广者"))
+                                    .font(.subheadline.weight(.semibold))
+                                    .foregroundStyle(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
                         }
 
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("James Yuan")
-                                .font(.system(size: 30, weight: .black, design: .serif))
-                            Text(localized("Classical music advocate", "古典音乐推广者"))
-                                .font(.subheadline.weight(.semibold))
-                                .foregroundStyle(.secondary)
+                        DecorativeDividerStatic()
+
+                        Text(localized(
+                            "James Yuan loves classical music and is dedicated to introducing it to more listeners. He also follows music technology closely, believing that thoughtful technology can help more people feel the beauty of classical music.",
+                            "James Yuan 热爱古典音乐，致力于推广古典音乐，同时关注音乐科技。他相信通过有温度的科技，可以让更多人感受古典音乐的美好。"
+                        ))
+                        .font(.body)
+                        .lineSpacing(6)
+                        .foregroundStyle(.primary.opacity(0.9))
+                        .fixedSize(horizontal: false, vertical: true)
+
+                        Link(destination: URL(string: "https://www.jamesyyy.com")!) {
+                            HStack(spacing: 8) {
+                                Text(localized("Learn more at www.jamesyyy.com", "了解更多 James Yuan：www.jamesyyy.com"))
+                                    .fixedSize(horizontal: false, vertical: true)
+                                Image(systemName: "arrow.up.right")
+                                    .font(.caption.weight(.bold))
+                            }
+                            .font(.footnote.weight(.bold))
+                            .foregroundStyle(Color(red: 0.58, green: 0.22, blue: 0.18))
                         }
                     }
-
-                    DecorativeDividerStatic()
-
-                    Text(localized(
-                        "James Yuan loves classical music and is dedicated to introducing it to more listeners. He also follows music technology closely, believing that thoughtful technology can help more people feel the beauty of classical music.",
-                        "James Yuan 热爱古典音乐，致力于推广古典音乐，同时关注音乐科技。他相信通过有温度的科技，可以让更多人感受古典音乐的美好。"
-                    ))
-                    .font(.body)
-                    .lineSpacing(6)
-                    .foregroundStyle(.primary.opacity(0.9))
-
-                    Link(destination: URL(string: "https://www.jamesyyy.com")!) {
-                        HStack(spacing: 8) {
-                            Text(localized("Learn more at www.jamesyyy.com", "了解更多 James Yuan：www.jamesyyy.com"))
-                            Image(systemName: "arrow.up.right")
-                                .font(.caption.weight(.bold))
-                        }
-                        .font(.footnote.weight(.bold))
-                        .foregroundStyle(Color(red: 0.58, green: 0.22, blue: 0.18))
-                    }
-
-                    Spacer()
+                    .frame(maxWidth: 620, alignment: .leading)
+                    .frame(maxWidth: .infinity)
+                    .padding(24)
                 }
-                .padding(24)
             }
             .navigationTitle(localized("About", "关于"))
             .navigationBarTitleDisplayMode(.inline)
