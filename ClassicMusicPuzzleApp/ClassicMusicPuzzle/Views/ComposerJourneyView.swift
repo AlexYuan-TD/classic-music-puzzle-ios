@@ -277,36 +277,6 @@ private struct ComposerAssistantSheet: View {
     }
 }
 
-private struct AssistantMessageBubble: View {
-    let message: AssistantChatMessage
-    let composer: Composer
-
-    var body: some View {
-        HStack {
-            if message.isUser {
-                Spacer(minLength: 40)
-            }
-
-            Text(message.text)
-                .font(.body)
-                .lineSpacing(4)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(13)
-                .foregroundStyle(message.isUser ? .white : .primary)
-                .background(message.isUser ? composer.color.opacity(0.86) : .white.opacity(0.48))
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(message.isUser ? .clear : composer.color.opacity(0.18), lineWidth: 1)
-                }
-
-            if !message.isUser {
-                Spacer(minLength: 40)
-            }
-        }
-    }
-}
-
 private struct ListenerReflectionSheet: View {
     let composer: Composer
     let language: AppLanguage
