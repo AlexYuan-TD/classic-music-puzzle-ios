@@ -24,6 +24,12 @@ The app does not provide account creation or sign-in.
 
 The first version should remain offline-first. If future versions add online content, analytics, cloud sync, AI features, or sharing, update this file, the privacy policy, and App Store Connect privacy answers before release.
 
+## AI Services
+
+Third-party AI service: No
+
+The first release does not send prompts, reflections, chat text, identifiers, or any other user data to a third-party AI service. The in-app listening guide is local static educational guidance only.
+
 ## Privacy Policy URL
 
 Use after publishing:

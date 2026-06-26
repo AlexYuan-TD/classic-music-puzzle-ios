@@ -6,6 +6,7 @@ struct ComposerJourneyView: View {
     @State private var composerIndex = 0
     @State private var isAssistantPresented = false
     @State private var isAboutPresented = false
+    @State private var isReflectionPresented = false
     @State private var reflections: [ListenerReflection] = []
 
     private var composer: Composer { Composer.catalog[composerIndex] }
@@ -26,25 +27,12 @@ struct ComposerJourneyView: View {
                             ComposerHeaderView(composer: composer, language: language, layout: layout)
                             ArtQuoteView(composer: composer, language: language, layout: layout)
                             ImmersivePoemView(composer: composer, language: language, layout: layout)
-                            ListenerReflectionView(composer: composer, language: language, layout: layout, reflections: $reflections)
                         }
                         .frame(maxWidth: layout.contentMaxWidth)
                         .frame(maxWidth: .infinity)
                         .padding(.horizontal, layout.contentInset)
                         .padding(.bottom, layout.scrollBottomInset)
                     }
-                }
-                .safeAreaInset(edge: .bottom) {
-                    HStack {
-                        Spacer()
-                        ComposerAssistantButton(composer: composer, language: language, layout: layout) {
-                            isAssistantPresented = true
-                        }
-                    }
-                    .frame(maxWidth: layout.contentMaxWidth)
-                    .frame(maxWidth: .infinity)
-                    .padding(.horizontal, layout.contentInset + layout.outerPadding)
-                    .padding(.bottom, layout.isCompact ? 8 : 12)
                 }
             }
             .gesture(
@@ -64,31 +52,45 @@ struct ComposerJourneyView: View {
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        isAboutPresented = true
+                    Menu {
+                        Button {
+                            isAssistantPresented = true
+                        } label: {
+                            Label(localized("Listening Guide", "聆听提示"), systemImage: "music.note.list")
+                        }
+
+                        Button {
+                            isReflectionPresented = true
+                        } label: {
+                            Label(localized("Leave a Reflection", "留下听后感"), systemImage: "text.bubble")
+                        }
+
+                        Button {
+                            isAboutPresented = true
+                        } label: {
+                            Label(localized("About James Yuan", "关于 James Yuan"), systemImage: "person.crop.circle")
+                        }
+
+                        Menu(localized("Composer", "音乐家")) {
+                            ForEach(Array(Composer.catalog.enumerated()), id: \.element.id) { index, item in
+                                Button(item.name.text(for: language)) {
+                                    composerIndex = index
+                                    player.play(theme: item.theme)
+                                }
+                            }
+                        }
+
+                        Menu(language.displayName) {
+                            ForEach(AppLanguage.allCases) { item in
+                                Button(item.displayName) {
+                                    languageRawValue = item.rawValue
+                                }
+                            }
+                        }
                     } label: {
-                        Image(systemName: "person.crop.circle")
+                        Image(systemName: "ellipsis.circle")
                     }
-                    .accessibilityLabel(Text(localized("About James Yuan", "关于 James Yuan")))
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu(localized("Composer", "音乐家")) {
-                        ForEach(Array(Composer.catalog.enumerated()), id: \.element.id) { index, item in
-                            Button(item.name.text(for: language)) {
-                                composerIndex = index
-                                player.play(theme: item.theme)
-                            }
-                        }
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu(language.displayName) {
-                        ForEach(AppLanguage.allCases) { item in
-                            Button(item.displayName) {
-                                languageRawValue = item.rawValue
-                            }
-                        }
-                    }
+                    .accessibilityLabel(Text(localized("More options", "更多选项")))
                 }
             }
             .onAppear {
@@ -99,6 +101,10 @@ struct ComposerJourneyView: View {
             }
             .sheet(isPresented: $isAssistantPresented) {
                 ComposerAssistantSheet(composer: composer, language: language)
+                    .presentationDetents([.medium, .large])
+            }
+            .sheet(isPresented: $isReflectionPresented) {
+                ListenerReflectionSheet(composer: composer, language: language, reflections: $reflections)
                     .presentationDetents([.medium, .large])
             }
             .sheet(isPresented: $isAboutPresented) {
@@ -133,51 +139,14 @@ private struct JourneyLayout {
     var contentMaxWidth: CGFloat { isWide ? 680 : .infinity }
     var sectionPadding: CGFloat { isCompact ? 14 : 20 }
     var portraitSize: CGFloat { isCompact ? 62 : 78 }
-    var quoteSizeEnglish: CGFloat { isCompact ? 25 : 32 }
-    var quoteSizeChinese: CGFloat { isCompact ? 28 : 34 }
-    var poemTitleSize: CGFloat { isCompact ? 21 : 26 }
-    var poemLineSizeEnglish: CGFloat { isCompact ? 18 : 22 }
-    var poemLineSizeChinese: CGFloat { isCompact ? 21 : 25 }
-    var poemMinHeight: CGFloat { isCompact ? 250 : (isWide ? 300 : 340) }
+    var quoteSizeEnglish: CGFloat { isCompact ? 25 : 29 }
+    var quoteSizeChinese: CGFloat { isCompact ? 28 : 30 }
+    var poemTitleSize: CGFloat { isCompact ? 21 : 23 }
+    var poemLineSizeEnglish: CGFloat { isCompact ? 18 : 19 }
+    var poemLineSizeChinese: CGFloat { isCompact ? 21 : 22 }
+    var poemMinHeight: CGFloat { isCompact ? 250 : (isWide ? 280 : 292) }
     var assistantMascotSize: CGFloat { isCompact ? 34 : 42 }
     var scrollBottomInset: CGFloat { isCompact ? 18 : 24 }
-}
-
-private struct ComposerAssistantButton: View {
-    let composer: Composer
-    let language: AppLanguage
-    let layout: JourneyLayout
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: layout.isCompact ? 7 : 10) {
-                ComposerAssistantMascot(composer: composer, size: layout.assistantMascotSize)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(layout.isCompact ? "Maestro" : (language == .english ? "Ask Maestro" : "问问 Maestro"))
-                        .font(.caption.weight(.heavy))
-                    if !layout.isCompact {
-                        Text(language == .english ? composer.name.english : "当前音乐家")
-                            .font(.caption2.weight(.semibold))
-                            .lineLimit(1)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
-            .padding(.horizontal, layout.isCompact ? 9 : 12)
-            .padding(.vertical, layout.isCompact ? 7 : 9)
-            .background(.ultraThinMaterial)
-            .clipShape(Capsule())
-            .overlay {
-                Capsule()
-                    .stroke(composer.color.opacity(0.28), lineWidth: 1)
-            }
-            .shadow(color: composer.color.opacity(0.22), radius: 14, y: 8)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(Text(language == .english ? "Open composer assistant" : "打开音乐家助手"))
-    }
 }
 
 private struct ComposerAssistantMascot: View {
@@ -221,16 +190,14 @@ private struct ComposerAssistantMascot: View {
 private struct ComposerAssistantSheet: View {
     let composer: Composer
     let language: AppLanguage
-    @State private var draft = ""
-    @State private var messages: [AssistantChatMessage] = []
 
     var body: some View {
         NavigationStack {
             ZStack {
                 PortraitBackgroundView(composer: composer)
 
-                VStack(spacing: 0) {
-                    ScrollView {
+                ScrollView {
+                    VStack(spacing: 18) {
                         VStack(spacing: 10) {
                             ComposerAssistantMascot(composer: composer, size: 62)
 
@@ -247,89 +214,66 @@ private struct ComposerAssistantSheet: View {
                         }
                         .padding(.horizontal, 24)
                         .padding(.top, 24)
-                        .padding(.bottom, 14)
 
-                        LazyVStack(spacing: 12) {
-                            ForEach(activeMessages) { message in
-                                AssistantMessageBubble(message: message, composer: composer)
+                        VStack(alignment: .leading, spacing: 12) {
+                            ForEach(guideItems, id: \.self) { item in
+                                HStack(alignment: .top, spacing: 10) {
+                                    Image(systemName: "music.note")
+                                        .font(.caption.weight(.bold))
+                                        .foregroundStyle(composer.color)
+                                        .padding(.top, 3)
+
+                                    Text(item)
+                                        .font(.body)
+                                        .lineSpacing(4)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
                             }
                         }
                         .frame(maxWidth: 620)
                         .frame(maxWidth: .infinity)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 16)
-                    }
-
-                    HStack(spacing: 10) {
-                        TextField(inputPlaceholder, text: $draft, axis: .vertical)
-                            .textFieldStyle(.plain)
-                            .lineLimit(1...3)
-                            .padding(12)
-                            .background(.white.opacity(0.45))
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .overlay {
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(composer.color.opacity(0.18), lineWidth: 1)
-                            }
-
-                        Button(language == .english ? "Send" : "发送") {
-                            send()
+                        .padding(18)
+                        .background(.white.opacity(0.36))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(composer.color.opacity(0.18), lineWidth: 1)
                         }
-                        .font(.footnote.weight(.bold))
-                        .buttonStyle(.borderedProminent)
-                        .tint(composer.color)
-                        .disabled(draft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                     }
-                    .padding(16)
                     .frame(maxWidth: 660)
                     .frame(maxWidth: .infinity)
-                    .background(.ultraThinMaterial)
+                    .padding(20)
                 }
             }
-            .navigationTitle(language == .english ? "Composer Chat" : "音乐家对话")
+            .navigationTitle(language == .english ? "Listening Guide" : "聆听提示")
             .navigationBarTitleDisplayMode(.inline)
-            .onAppear {
-                if messages.isEmpty {
-                    messages = [welcomeMessage]
-                }
-            }
         }
     }
 
-    private var activeMessages: [AssistantChatMessage] {
-        messages.isEmpty ? [welcomeMessage] : messages
-    }
-
     private var title: String {
-        language == .english ? "Maestro speaks for \(composer.name.english)" : "Maestro 代表\(composer.name.simplifiedChinese)与你对话"
+        language == .english ? "Listen with \(composer.name.english)" : "和\(composer.name.simplifiedChinese)一起聆听"
     }
 
     private var subtitle: String {
         language == .english
-            ? "Ask about the music, the composer, or what to listen for in this moment."
-            : "可以问这段音乐、这位音乐家，或现在应该听见什么。"
+            ? "A local listening guide for the current composer. No network service or external processing is used."
+            : "当前音乐家的本地聆听提示。不使用网络服务，也不进行外部处理。"
     }
 
-    private var inputPlaceholder: String {
-        language == .english ? "What would you like to ask?" : "你想问这位音乐家什么？"
-    }
+    private var guideItems: [String] {
+        if language == .english {
+            return [
+                "Notice the first musical idea and how it returns.",
+                "Listen for contrast: quiet and strong, stillness and motion.",
+                "Let the quote and poem give you one image to carry through the music."
+            ]
+        }
 
-    private var welcomeMessage: AssistantChatMessage {
-        AssistantChatMessage(
-            isUser: false,
-            text: language == .english
-                ? "I am listening with you. Ask me why \(composer.famousWork.english) still feels alive today."
-                : "我正在和你一起听。你可以问我：为什么\(composer.famousWork.simplifiedChinese)今天仍然打动人？"
-        )
-    }
-
-    private func send() {
-        let question = draft.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !question.isEmpty else { return }
-
-        messages.append(AssistantChatMessage(isUser: true, text: question))
-        messages.append(AssistantChatMessage(isUser: false, text: ComposerAssistant.reply(to: question, composer: composer, language: language)))
-        draft = ""
+        return [
+            "先留意开头的音乐动机，以及它如何再次出现。",
+            "聆听对比：安静与有力，停顿与流动。",
+            "让 quote 与诗句给你一个画面，再带着这个画面听音乐。"
+        ]
     }
 }
 
@@ -363,19 +307,30 @@ private struct AssistantMessageBubble: View {
     }
 }
 
-private struct AssistantChatMessage: Identifiable, Equatable {
-    let id = UUID()
-    let isUser: Bool
-    let text: String
-}
+private struct ListenerReflectionSheet: View {
+    let composer: Composer
+    let language: AppLanguage
+    @Binding var reflections: [ListenerReflection]
 
-private enum ComposerAssistant {
-    static func reply(to question: String, composer: Composer, language: AppLanguage) -> String {
-        if language == .english {
-            return "If \(composer.name.english) could answer, the first clue might be this: \(composer.inspiration.english) In \(composer.famousWork.english), listen for how a small musical idea becomes a feeling you can carry."
+    var body: some View {
+        NavigationStack {
+            GeometryReader { proxy in
+                let layout = JourneyLayout(size: proxy.size)
+
+                ZStack {
+                    PortraitBackgroundView(composer: composer)
+
+                    ScrollView {
+                        ListenerReflectionView(composer: composer, language: language, layout: layout, reflections: $reflections)
+                            .frame(maxWidth: 620)
+                            .frame(maxWidth: .infinity)
+                            .padding(.top, 12)
+                    }
+                }
+            }
+            .navigationTitle(language == .english ? "Reflection" : "听后感")
+            .navigationBarTitleDisplayMode(.inline)
         }
-
-        return "如果\(composer.name.simplifiedChinese)来回答，也许会先说：\(composer.inspiration.simplifiedChinese) 听\(composer.famousWork.simplifiedChinese)时，可以留意一个很小的音乐动机，如何慢慢变成可以带走的情绪。"
     }
 }
 

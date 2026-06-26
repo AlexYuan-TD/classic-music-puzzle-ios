@@ -7,7 +7,7 @@ This plan is for publishing Classic Music Journey with Apple Developer account `
 - App name: Classic Music Journey
 - Bundle ID: `com.jamesyyy.classicmusicjourney`
 - Version: `1.0`
-- Build: `3`
+- Build: `4`
 - Apple Team ID configured in Xcode project: `47DCQ2U48C`
 - Price: Free
 - Primary category: Music
@@ -56,7 +56,7 @@ This reduces the compliance surface while you prepare any required ICP filing fo
 11. Fill app metadata from `docs/app-store-metadata.md`.
 12. Fill privacy answers from `docs/app-privacy-answers.md`.
 13. Add age rating using the notes in `docs/app-store-metadata.md`.
-14. Upload build `1.0 (3)` from Xcode.
+14. Upload build `1.0 (4)` from Xcode.
 15. Add screenshots after device/simulator capture.
 16. Submit to TestFlight first.
 17. Test on iPhone SE and at least one larger iPhone.
@@ -71,7 +71,7 @@ These require full Xcode, not only Command Line Tools.
 3. Select the Apple Developer team for `yd.y@163.com`.
 4. Select target `ClassicMusicPuzzle`.
 5. Confirm bundle ID `com.jamesyyy.classicmusicjourney`.
-6. Confirm version `1.0` and build `3`.
+6. Confirm version `1.0` and build `4`.
 7. Select Any iOS Device.
 8. Choose Product > Archive.
 9. In Organizer, choose Distribute App.
@@ -92,18 +92,24 @@ For China mainland review context:
 The app is intended for educational and cultural appreciation of classical music. It does not provide public user posting, social networking, purchases, or account registration in this version.
 ```
 
-## Reply for Guideline 4 iPad Layout Rejection
+## Reply for Guideline 4 Layout and Guideline 2.1 AI Questions
 
-Use this after uploading build `1.0 (3)`:
+Use this after uploading build `1.0 (4)`:
 
 ```text
 Hello App Review,
 
-Thank you for reviewing Classic Music Journey. We revised the app to address the iPad Air 11-inch layout issue.
+Thank you for reviewing Classic Music Journey. We revised the app to address the layout issue on iPhone 17 Pro Max and other compatible devices.
 
-In build 1.0 (3), the main listening page now constrains content width on wider screens, centers the composer experience, keeps the Maestro assistant button in a safe-area inset so it does not cover content, and allows longer text in the reflection, assistant, and About screens to wrap and scroll. We also declared full-screen behavior in Info.plist to reduce iPad multitasking layout conflicts.
+In build 1.0 (4), the main listening page has been simplified to reduce crowding. Reflection and listening guide features are now opened from the More menu instead of being placed on the main listening screen. Text sizes and poem spacing were reduced on large iPhone screens, and longer text in secondary screens can wrap and scroll.
 
-Please review the updated build 1.0 (3).
+Regarding Guideline 2.1:
+
+1. The app does not use any third-party AI service.
+2. No sensitive personal data is collected or sent to any third-party AI service.
+3. The app does not send user chat, reflection, or listening data to a server. The Listening Guide in build 1.0 (4) is local static educational guidance only and has no chat input or network-based AI processing.
+
+Please review the updated build 1.0 (4).
 ```
 
 ## Final Manual Gate
