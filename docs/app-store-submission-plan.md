@@ -92,24 +92,20 @@ For China mainland review context:
 The app is intended for educational and cultural appreciation of classical music. It does not provide public user posting, social networking, purchases, or account registration in this version.
 ```
 
-## Reply for Guideline 4 Layout and Guideline 2.1 AI Questions
+## Reply for Guideline 4 Layout
 
-Use this after uploading build `1.0 (4)`:
+Use this after uploading build `1.0 (6)`:
 
 ```text
 Hello App Review,
 
-Thank you for reviewing Classic Music Journey. We revised the app to address the layout issue on iPhone 17 Pro Max and other compatible devices.
+Thank you for reviewing Classic Music Journey. We revised the app again to address the layout issue reported on iPad Air 11-inch running iPadOS 26.5.
 
-In build 1.0 (4), the main listening page has been simplified to reduce crowding. Reflection and listening guide features are now opened from the More menu instead of being placed on the main listening screen. Text sizes and poem spacing were reduced on large iPhone screens, and longer text in secondary screens can wrap and scroll.
+In build 1.0 (6), iPad-width screens now use a dedicated two-column listening layout instead of stacking all sections vertically. The composer introduction and quote are placed in the left column, while the poem experience is placed in the right column, giving the text more room and reducing vertical crowding.
 
-Regarding Guideline 2.1:
+We also reduced oversized text and poem spacing across larger screens, added safer top and bottom spacing, and changed the Listening Guide, Reflection, and About sheets to open at full height so their content is easier to read and interact with.
 
-1. The app does not use any third-party AI service.
-2. No sensitive personal data is collected or sent to any third-party AI service.
-3. The app does not send user chat, reflection, or listening data to a server. The Listening Guide in build 1.0 (4) is local static educational guidance only and has no chat input or network-based AI processing.
-
-Please review the updated build 1.0 (4).
+Please review the updated build 1.0 (6).
 ```
 
 ## Final Manual Gate
