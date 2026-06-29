@@ -92,7 +92,7 @@ For China mainland review context:
 The app is intended for educational and cultural appreciation of classical music. It does not provide public user posting, social networking, purchases, or account registration in this version.
 ```
 
-## Reply for Guideline 4 Layout
+## Reply for Guideline 4 Layout and Guideline 2.1 AI Questions
 
 Use this after uploading build `1.0 (6)`:
 
@@ -104,6 +104,12 @@ Thank you for reviewing Classic Music Journey. We revised the app again to addre
 In build 1.0 (6), iPad-width screens now use a dedicated two-column listening layout instead of stacking all sections vertically. The composer introduction and quote are placed in the left column, while the poem experience is placed in the right column, giving the text more room and reducing vertical crowding.
 
 We also reduced oversized text and poem spacing across larger screens, added safer top and bottom spacing, and changed the Listening Guide, Reflection, and About sheets to open at full height so their content is easier to read and interact with.
+
+Regarding Guideline 2.1:
+
+1. The app does not use any third-party AI service.
+2. No sensitive personal data is collected or sent to any third-party AI service.
+3. The app does not send user chat, reflection, or listening data to a server. The Listening Guide is local static educational guidance only. It has no chat input and does not use network-based AI processing, so no user consent prompt for third-party AI processing is needed in this version.
 
 Please review the updated build 1.0 (6).
 ```
