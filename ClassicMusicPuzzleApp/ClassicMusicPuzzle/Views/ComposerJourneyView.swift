@@ -153,20 +153,20 @@ private struct JourneyLayout {
     init(size: CGSize) {
         isCompact = size.width <= 380 || size.height <= 700
         isWide = size.width >= 700
-        usesTwoColumnLayout = size.width >= 760 && size.height >= 720
+        usesTwoColumnLayout = size.width >= 980 && size.height >= 720
     }
 
     var outerPadding: CGFloat { isCompact ? 12 : (usesTwoColumnLayout ? 18 : 20) }
     var contentInset: CGFloat { usesTwoColumnLayout ? 22 : (isWide ? 28 : 0) }
-    var contentMaxWidth: CGFloat { usesTwoColumnLayout ? 1060 : (isWide ? 680 : .infinity) }
+    var contentMaxWidth: CGFloat { usesTwoColumnLayout ? 1060 : (isWide ? 720 : .infinity) }
     var sectionPadding: CGFloat { isCompact ? 14 : (usesTwoColumnLayout ? 18 : 20) }
     var portraitSize: CGFloat { isCompact ? 58 : (usesTwoColumnLayout ? 70 : 72) }
-    var quoteSizeEnglish: CGFloat { isCompact ? 23 : (usesTwoColumnLayout ? 26 : 27) }
-    var quoteSizeChinese: CGFloat { isCompact ? 25 : (usesTwoColumnLayout ? 27 : 28) }
+    var quoteSizeEnglish: CGFloat { isCompact ? 23 : (usesTwoColumnLayout ? 26 : 25) }
+    var quoteSizeChinese: CGFloat { isCompact ? 25 : (usesTwoColumnLayout ? 27 : 26) }
     var poemTitleSize: CGFloat { isCompact ? 20 : (usesTwoColumnLayout ? 22 : 22) }
     var poemLineSizeEnglish: CGFloat { isCompact ? 17 : (usesTwoColumnLayout ? 18 : 18) }
     var poemLineSizeChinese: CGFloat { isCompact ? 19 : (usesTwoColumnLayout ? 20 : 20) }
-    var poemMinHeight: CGFloat { isCompact ? 220 : (usesTwoColumnLayout ? 0 : 252) }
+    var poemMinHeight: CGFloat { isCompact ? 220 : (usesTwoColumnLayout ? 0 : 240) }
     var assistantMascotSize: CGFloat { isCompact ? 34 : 42 }
     var scrollTopInset: CGFloat { usesTwoColumnLayout ? 20 : 0 }
     var scrollBottomInset: CGFloat { isCompact ? 16 : 22 }

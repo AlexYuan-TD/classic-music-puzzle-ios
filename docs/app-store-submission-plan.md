@@ -94,16 +94,16 @@ The app is intended for educational and cultural appreciation of classical music
 
 ## Reply for Guideline 4 Layout and Guideline 2.1 AI Questions
 
-Use this after uploading build `1.0 (6)`:
+Use this after uploading build `1.0 (7)`:
 
 ```text
 Hello App Review,
 
 Thank you for reviewing Classic Music Journey. We revised the app again to address the layout issue reported on iPad Air 11-inch running iPadOS 26.5.
 
-In build 1.0 (6), iPad-width screens now use a dedicated two-column listening layout instead of stacking all sections vertically. The composer introduction and quote are placed in the left column, while the poem experience is placed in the right column, giving the text more room and reducing vertical crowding.
+In build 1.0 (7), the app now supports iPad natively instead of relying on iPhone compatibility display on iPad. The app bundle now includes both iPhone and iPad device families, and iPad supports portrait, upside-down portrait, landscape left, and landscape right orientations.
 
-We also reduced oversized text and poem spacing across larger screens, added safer top and bottom spacing, and changed the Listening Guide, Reflection, and About sheets to open at full height so their content is easier to read and interact with.
+We also revised the responsive layout for iPad Air 11-inch. iPad portrait now uses a readable single-column layout with wider content and reduced oversized text. Two-column layout is only used on sufficiently wide screens, so content is no longer squeezed into narrow columns. Listening Guide, Reflection, and About sheets open at full height so their content is easier to read and interact with.
 
 Regarding Guideline 2.1:
 
@@ -111,7 +111,7 @@ Regarding Guideline 2.1:
 2. No sensitive personal data is collected or sent to any third-party AI service.
 3. The app does not send user chat, reflection, or listening data to a server. The Listening Guide is local static educational guidance only. It has no chat input and does not use network-based AI processing, so no user consent prompt for third-party AI processing is needed in this version.
 
-Please review the updated build 1.0 (6).
+Please review the updated build 1.0 (7).
 ```
 
 ## Final Manual Gate
