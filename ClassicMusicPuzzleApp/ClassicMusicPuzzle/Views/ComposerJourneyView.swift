@@ -8,6 +8,8 @@ struct ComposerJourneyView: View {
     @State private var isAboutPresented = false
     @State private var isReflectionPresented = false
     @State private var reflections: [ListenerReflection] = []
+    @State private var isIntroVisible = true
+    @State private var introDismissTask: Task<Void, Never>?
 
     private var composer: Composer { Composer.catalog[composerIndex] }
     private var language: AppLanguage {
@@ -15,99 +17,116 @@ struct ComposerJourneyView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            GeometryReader { proxy in
-                let layout = JourneyLayout(size: proxy.size)
+        ZStack {
+            if isIntroVisible {
+                LaunchArtworkView()
+                    .transition(.opacity)
+                    .zIndex(1)
+            } else {
+                NavigationStack {
+                    GeometryReader { proxy in
+                        let layout = JourneyLayout(size: proxy.size)
 
-                ZStack {
-                    PortraitBackgroundView(composer: composer)
+                        ZStack {
+                            PortraitBackgroundView(composer: composer)
 
-                    ScrollView {
-                        journeyContent(layout: layout)
-                        .frame(maxWidth: layout.contentMaxWidth)
-                        .frame(maxWidth: .infinity)
-                        .padding(.horizontal, layout.contentInset)
-                        .padding(.top, layout.scrollTopInset)
-                        .padding(.bottom, layout.scrollBottomInset)
-                    }
-                }
-            }
-            .gesture(
-                DragGesture(minimumDistance: 40)
-                    .onEnded { value in
-                        if value.translation.width < -60 {
-                            moveComposer(by: 1)
-                        } else if value.translation.width > 60 {
-                            moveComposer(by: -1)
-                        }
-                    }
-            )
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button(player.isPlaying ? localized("Pause", "暂停") : localized("Play", "播放")) {
-                        player.isPlaying ? player.stop() : player.play(theme: composer.theme)
-                    }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu {
-                        Button {
-                            isAssistantPresented = true
-                        } label: {
-                            Label(localized("Listening Guide", "聆听提示"), systemImage: "music.note.list")
-                        }
-
-                        Button {
-                            isReflectionPresented = true
-                        } label: {
-                            Label(localized("Leave a Reflection", "留下听后感"), systemImage: "text.bubble")
-                        }
-
-                        Button {
-                            isAboutPresented = true
-                        } label: {
-                            Label(localized("About James Yuan", "关于 James Yuan"), systemImage: "person.crop.circle")
-                        }
-
-                        Menu(localized("Composer", "音乐家")) {
-                            ForEach(Array(Composer.catalog.enumerated()), id: \.element.id) { index, item in
-                                Button(item.name.text(for: language)) {
-                                    composerIndex = index
-                                    player.play(theme: item.theme)
-                                }
+                            ScrollView {
+                                journeyContent(layout: layout)
+                                .frame(maxWidth: layout.contentMaxWidth)
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, layout.contentInset)
+                                .padding(.top, layout.scrollTopInset)
+                                .padding(.bottom, layout.scrollBottomInset)
                             }
                         }
-
-                        Menu(language.displayName) {
-                            ForEach(AppLanguage.allCases) { item in
-                                Button(item.displayName) {
-                                    languageRawValue = item.rawValue
+                    }
+                    .gesture(
+                        DragGesture(minimumDistance: 40)
+                            .onEnded { value in
+                                if value.translation.width < -60 {
+                                    moveComposer(by: 1)
+                                } else if value.translation.width > 60 {
+                                    moveComposer(by: -1)
                                 }
                             }
+                    )
+                    .toolbar {
+                        ToolbarItem(placement: .topBarLeading) {
+                            Button(player.isPlaying ? localized("Pause", "暂停") : localized("Play", "播放")) {
+                                player.isPlaying ? player.stop() : player.play(theme: composer.theme)
+                            }
                         }
-                    } label: {
-                        Image(systemName: "ellipsis.circle")
+                        ToolbarItemGroup(placement: .topBarTrailing) {
+                            Button {
+                                endListening()
+                            } label: {
+                                Label(localized("End Listening", "结束聆听"), systemImage: "xmark.circle")
+                            }
+
+                            Menu {
+                                Button {
+                                    isAssistantPresented = true
+                                } label: {
+                                    Label(localized("Listening Guide", "聆听提示"), systemImage: "music.note.list")
+                                }
+
+                                Button {
+                                    isReflectionPresented = true
+                                } label: {
+                                    Label(localized("Leave a Reflection", "留下听后感"), systemImage: "text.bubble")
+                                }
+
+                                Button {
+                                    isAboutPresented = true
+                                } label: {
+                                    Label(localized("About James Yuan", "关于 James Yuan"), systemImage: "person.crop.circle")
+                                }
+
+                                Menu(localized("Composer", "音乐家")) {
+                                    ForEach(Array(Composer.catalog.enumerated()), id: \.element.id) { index, item in
+                                        Button(item.name.text(for: language)) {
+                                            composerIndex = index
+                                            player.play(theme: item.theme)
+                                        }
+                                    }
+                                }
+
+                                Menu(language.displayName) {
+                                    ForEach(AppLanguage.allCases) { item in
+                                        Button(item.displayName) {
+                                            languageRawValue = item.rawValue
+                                        }
+                                    }
+                                }
+                            } label: {
+                                Image(systemName: "ellipsis.circle")
+                            }
+                            .accessibilityLabel(Text(localized("More options", "更多选项")))
+                        }
                     }
-                    .accessibilityLabel(Text(localized("More options", "更多选项")))
+                    .onAppear {
+                        player.play(theme: composer.theme)
+                    }
+                    .onChange(of: composerIndex) { _, _ in
+                        player.play(theme: composer.theme)
+                    }
+                    .sheet(isPresented: $isAssistantPresented) {
+                        ComposerAssistantSheet(composer: composer, language: language)
+                            .presentationDetents([.large])
+                    }
+                    .sheet(isPresented: $isReflectionPresented) {
+                        ListenerReflectionSheet(composer: composer, language: language, reflections: $reflections)
+                            .presentationDetents([.large])
+                    }
+                    .sheet(isPresented: $isAboutPresented) {
+                        AboutJamesSheet(language: language)
+                            .presentationDetents([.large])
+                    }
                 }
             }
-            .onAppear {
-                player.play(theme: composer.theme)
-            }
-            .onChange(of: composerIndex) { _, _ in
-                player.play(theme: composer.theme)
-            }
-            .sheet(isPresented: $isAssistantPresented) {
-                ComposerAssistantSheet(composer: composer, language: language)
-                    .presentationDetents([.large])
-            }
-            .sheet(isPresented: $isReflectionPresented) {
-                ListenerReflectionSheet(composer: composer, language: language, reflections: $reflections)
-                    .presentationDetents([.large])
-            }
-            .sheet(isPresented: $isAboutPresented) {
-                AboutJamesSheet(language: language)
-                    .presentationDetents([.large])
-            }
+        }
+        .onAppear {
+            scheduleIntroDismissal()
         }
     }
 
@@ -117,18 +136,51 @@ struct ComposerJourneyView: View {
         player.play(theme: composer.theme)
     }
 
+    private func endListening() {
+        player.stop()
+        isAssistantPresented = false
+        isReflectionPresented = false
+        isAboutPresented = false
+        withAnimation(.easeInOut(duration: 0.24)) {
+            isIntroVisible = true
+        }
+        scheduleIntroDismissal()
+    }
+
+    private func scheduleIntroDismissal() {
+        introDismissTask?.cancel()
+        introDismissTask = Task {
+            try? await Task.sleep(nanoseconds: 2_000_000_000)
+            guard !Task.isCancelled else { return }
+
+            await MainActor.run {
+                withAnimation(.easeInOut(duration: 0.5)) {
+                    isIntroVisible = false
+                }
+            }
+        }
+    }
+
     @ViewBuilder
     private func journeyContent(layout: JourneyLayout) -> some View {
         if layout.usesTwoColumnLayout {
-            HStack(alignment: .top, spacing: layout.columnSpacing) {
-                VStack(spacing: 0) {
-                    ComposerHeaderView(composer: composer, language: language, layout: layout)
-                    ArtQuoteView(composer: composer, language: language, layout: layout)
-                }
-                .frame(maxWidth: layout.sidebarWidth, alignment: .top)
+            VStack(spacing: 18) {
+                HStack(alignment: .top, spacing: layout.columnSpacing) {
+                    VStack(spacing: 0) {
+                        ComposerHeaderView(composer: composer, language: language, layout: layout)
+                        ArtQuoteView(composer: composer, language: language, layout: layout)
+                    }
+                    .frame(maxWidth: layout.sidebarWidth, alignment: .top)
 
-                ImmersivePoemView(composer: composer, language: language, layout: layout)
-                    .frame(maxWidth: .infinity, alignment: .top)
+                    ImmersivePoemView(composer: composer, language: language, layout: layout)
+                        .frame(maxWidth: .infinity, alignment: .top)
+                }
+
+                ComposerNavigationControls(composer: composer, language: language, layout: layout, previous: {
+                    moveComposer(by: -1)
+                }, next: {
+                    moveComposer(by: 1)
+                })
             }
             .padding(.horizontal, layout.outerPadding)
         } else {
@@ -136,8 +188,74 @@ struct ComposerJourneyView: View {
                 ComposerHeaderView(composer: composer, language: language, layout: layout)
                 ArtQuoteView(composer: composer, language: language, layout: layout)
                 ImmersivePoemView(composer: composer, language: language, layout: layout)
+                ComposerNavigationControls(composer: composer, language: language, layout: layout, previous: {
+                    moveComposer(by: -1)
+                }, next: {
+                    moveComposer(by: 1)
+                })
             }
         }
+    }
+
+    private func localized(_ english: String, _ simplifiedChinese: String) -> String {
+        language == .english ? english : simplifiedChinese
+    }
+}
+
+private struct LaunchArtworkView: View {
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            Image("LaunchArtwork")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+
+            LinearGradient(
+                colors: [.clear, .black.opacity(0.64)],
+                startPoint: .center,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
+
+            Text("Copyright James Yuan")
+                .font(.system(size: 13, weight: .semibold, design: .serif))
+                .tracking(1.2)
+                .foregroundStyle(.white.opacity(0.82))
+                .padding(.bottom, 28)
+                .accessibilityLabel(Text("Copyright James Yuan"))
+        }
+        .background(.black)
+    }
+}
+
+private struct ComposerNavigationControls: View {
+    let composer: Composer
+    let language: AppLanguage
+    let layout: JourneyLayout
+    let previous: () -> Void
+    let next: () -> Void
+
+    var body: some View {
+        HStack(spacing: layout.isCompact ? 10 : 14) {
+            Button(action: previous) {
+                Label(localized("Previous", "上一页"), systemImage: "chevron.left")
+                    .frame(maxWidth: .infinity)
+            }
+
+            Button(action: next) {
+                HStack {
+                    Text(localized("Next", "下一页"))
+                    Image(systemName: "chevron.right")
+                }
+                    .frame(maxWidth: .infinity)
+            }
+        }
+        .font((layout.isCompact ? Font.footnote : Font.callout).weight(.bold))
+        .buttonStyle(.borderedProminent)
+        .tint(composer.color)
+        .padding(.horizontal, layout.outerPadding)
+        .padding(.top, layout.isCompact ? 4 : 8)
+        .padding(.bottom, layout.isCompact ? 14 : 20)
     }
 
     private func localized(_ english: String, _ simplifiedChinese: String) -> String {

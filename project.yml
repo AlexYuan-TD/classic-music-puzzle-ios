@@ -6,7 +6,7 @@ options:
 settings:
   base:
     MARKETING_VERSION: 1.0
-    CURRENT_PROJECT_VERSION: 7
+    CURRENT_PROJECT_VERSION: 8
 targets:
   ClassicMusicPuzzle:
     type: application
@@ -29,7 +29,8 @@ targets:
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         ITSAppUsesNonExemptEncryption: false
         LSRequiresIPhoneOS: true
-        UILaunchScreen: {}
+        UILaunchScreen:
+          UIImageName: LaunchArtwork
         UIApplicationSupportsIndirectInputEvents: true
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
