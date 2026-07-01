@@ -11,7 +11,9 @@
 		316C182E5573333BE6498C1B /* ClassicMusicPuzzleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91B131F11660A40C67DC9E64 /* ClassicMusicPuzzleApp.swift */; };
 		42553A0B23018C3C721AFE91 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 81603F32AF8EEA8350108AA7 /* InfoPlist.strings */; };
 		5C4F92C23168B1810CB2E61C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C75A5D6913282205B407575F /* Assets.xcassets */; };
+		85E278EE24525A791F04A868 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3628BCAE8910BD424E32A4B3 /* LaunchScreen.storyboard */; };
 		B6689788862FADEEFFD40B67 /* Composer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27476A2AC7BB185AC7C5B76B /* Composer.swift */; };
+		DF85C26A8FB28083556B883B /* LaunchScreenArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = 36AF1BBA590671E629E765C1 /* LaunchScreenArtwork.png */; };
 		F90D94D21CBBE576DC26D942 /* ComposerJourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C306147412046BBBEAAEB7 /* ComposerJourneyView.swift */; };
 /* End PBXBuildFile section */
 
@@ -19,6 +21,8 @@
 		170DBD7B71B294888F5785FE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		27476A2AC7BB185AC7C5B76B /* Composer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Composer.swift; sourceTree = "<group>"; };
 		283C8F72743FD4E44CE83CD3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3628BCAE8910BD424E32A4B3 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		36AF1BBA590671E629E765C1 /* LaunchScreenArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchScreenArtwork.png; sourceTree = "<group>"; };
 		82C6FB9543DF0759AFAF6C77 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		86E03478C686CBBA68DB7017 /* ClassicMusicPuzzle.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ClassicMusicPuzzle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91B131F11660A40C67DC9E64 /* ClassicMusicPuzzleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassicMusicPuzzleApp.swift; sourceTree = "<group>"; };
@@ -33,6 +37,8 @@
 			children = (
 				C75A5D6913282205B407575F /* Assets.xcassets */,
 				82C6FB9543DF0759AFAF6C77 /* Info.plist */,
+				3628BCAE8910BD424E32A4B3 /* LaunchScreen.storyboard */,
+				36AF1BBA590671E629E765C1 /* LaunchScreenArtwork.png */,
 				81603F32AF8EEA8350108AA7 /* InfoPlist.strings */,
 			);
 			path = Resources;
@@ -121,6 +127,9 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					E3C75485BCF273FBD13F0012 = {
+						DevelopmentTeam = 47DCQ2U48C;
+					};
 				};
 			};
 			buildConfigurationList = D28425BD9512BD3974F5375D /* Build configuration list for PBXProject "ClassicMusicPuzzle" */;
@@ -150,6 +159,8 @@
 			files = (
 				5C4F92C23168B1810CB2E61C /* Assets.xcassets in Resources */,
 				42553A0B23018C3C721AFE91 /* InfoPlist.strings in Resources */,
+				85E278EE24525A791F04A868 /* LaunchScreen.storyboard in Resources */,
+				DF85C26A8FB28083556B883B /* LaunchScreenArtwork.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,7 +227,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -299,7 +310,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

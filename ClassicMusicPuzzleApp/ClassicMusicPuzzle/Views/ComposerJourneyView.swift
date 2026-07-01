@@ -1,4 +1,7 @@
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#endif
 
 struct ComposerJourneyView: View {
     @StateObject private var player = ThemePlayer()
@@ -19,7 +22,7 @@ struct ComposerJourneyView: View {
     var body: some View {
         ZStack {
             if isIntroVisible {
-                LaunchArtworkView()
+                LaunchArtworkView(onVisible: scheduleIntroDismissal)
                     .transition(.opacity)
                     .zIndex(1)
             } else {
@@ -110,9 +113,6 @@ struct ComposerJourneyView: View {
                 }
             }
         }
-        .onAppear {
-            scheduleIntroDismissal()
-        }
     }
 
     private func moveComposer(by offset: Int) {
@@ -124,11 +124,11 @@ struct ComposerJourneyView: View {
     private func scheduleIntroDismissal() {
         introDismissTask?.cancel()
         introDismissTask = Task {
-            try? await Task.sleep(nanoseconds: 3_000_000_000)
+            try? await Task.sleep(nanoseconds: 4_500_000_000)
             guard !Task.isCancelled else { return }
 
             await MainActor.run {
-                withAnimation(.easeInOut(duration: 0.5)) {
+                withAnimation(.easeInOut(duration: 0.25)) {
                     isIntroVisible = false
                 }
             }
@@ -181,26 +181,15 @@ struct ComposerJourneyView: View {
 }
 
 private struct LaunchArtworkView: View {
-    @State private var isAnimated = false
+    let onVisible: () -> Void
 
     var body: some View {
-        GeometryReader { proxy in
+        GeometryReader { _ in
             ZStack(alignment: .bottom) {
-                Image("LaunchArtwork")
-                    .resizable()
-                    .scaledToFill()
-                    .scaleEffect(isAnimated ? 1.08 : 1.02)
-                    .offset(x: isAnimated ? -18 : 0, y: isAnimated ? -8 : 0)
-                    .blur(radius: 22)
-                    .opacity(0.48)
-                    .ignoresSafeArea()
-
-                Image("LaunchArtwork")
+                launchArtworkImage
                     .resizable()
                     .scaledToFit()
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                    .scaleEffect(isAnimated ? 1.025 : 1.0)
-                    .offset(x: launchArtworkOffsetX(for: proxy.size))
                     .shadow(color: .black.opacity(0.55), radius: 28, y: 10)
                     .ignoresSafeArea()
 
@@ -219,20 +208,19 @@ private struct LaunchArtworkView: View {
                     .accessibilityLabel(Text("Copyright James Yuan"))
             }
             .background(.black)
-            .onAppear {
-                withAnimation(.easeInOut(duration: 3.0)) {
-                    isAnimated = true
-                }
-            }
+            .onAppear(perform: onVisible)
         }
     }
 
-    private func launchArtworkOffsetX(for size: CGSize) -> CGFloat {
-        if size.height > size.width {
-            return -min(size.width * 0.12, 110)
+    private var launchArtworkImage: Image {
+        #if canImport(UIKit)
+        if let path = Bundle.main.path(forResource: "LaunchScreenArtwork", ofType: "png"),
+           let image = UIImage(contentsOfFile: path) {
+            return Image(uiImage: image)
         }
+        #endif
 
-        return -min(size.width * 0.04, 60)
+        return Image("LaunchArtworkFocus")
     }
 }
 
