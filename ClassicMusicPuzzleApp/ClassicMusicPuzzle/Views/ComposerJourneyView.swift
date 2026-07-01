@@ -124,7 +124,7 @@ struct ComposerJourneyView: View {
     private func scheduleIntroDismissal() {
         introDismissTask?.cancel()
         introDismissTask = Task {
-            try? await Task.sleep(nanoseconds: 2_000_000_000)
+            try? await Task.sleep(nanoseconds: 3_000_000_000)
             guard !Task.isCancelled else { return }
 
             await MainActor.run {
@@ -181,37 +181,58 @@ struct ComposerJourneyView: View {
 }
 
 private struct LaunchArtworkView: View {
+    @State private var isAnimated = false
+
     var body: some View {
-        ZStack(alignment: .bottom) {
-            Image("LaunchArtwork")
-                .resizable()
-                .scaledToFill()
-                .blur(radius: 22)
-                .opacity(0.46)
+        GeometryReader { proxy in
+            ZStack(alignment: .bottom) {
+                Image("LaunchArtwork")
+                    .resizable()
+                    .scaledToFill()
+                    .scaleEffect(isAnimated ? 1.08 : 1.02)
+                    .offset(x: isAnimated ? -18 : 0, y: isAnimated ? -8 : 0)
+                    .blur(radius: 22)
+                    .opacity(0.48)
+                    .ignoresSafeArea()
+
+                Image("LaunchArtwork")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                    .scaleEffect(isAnimated ? 1.025 : 1.0)
+                    .offset(x: launchArtworkOffsetX(for: proxy.size))
+                    .shadow(color: .black.opacity(0.55), radius: 28, y: 10)
+                    .ignoresSafeArea()
+
+                LinearGradient(
+                    colors: [.clear, .black.opacity(0.64)],
+                    startPoint: .center,
+                    endPoint: .bottom
+                )
                 .ignoresSafeArea()
 
-            Image("LaunchArtwork")
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                .shadow(color: .black.opacity(0.55), radius: 28, y: 10)
-                .ignoresSafeArea()
-
-            LinearGradient(
-                colors: [.clear, .black.opacity(0.64)],
-                startPoint: .center,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
-
-            Text("Copyright James Yuan")
-                .font(.system(size: 13, weight: .semibold, design: .serif))
-                .tracking(1.2)
-                .foregroundStyle(.white.opacity(0.82))
-                .padding(.bottom, 28)
-                .accessibilityLabel(Text("Copyright James Yuan"))
+                Text("Copyright James Yuan")
+                    .font(.system(size: 13, weight: .semibold, design: .serif))
+                    .tracking(1.2)
+                    .foregroundStyle(.white.opacity(0.82))
+                    .padding(.bottom, 28)
+                    .accessibilityLabel(Text("Copyright James Yuan"))
+            }
+            .background(.black)
+            .onAppear {
+                withAnimation(.easeInOut(duration: 3.0)) {
+                    isAnimated = true
+                }
+            }
         }
-        .background(.black)
+    }
+
+    private func launchArtworkOffsetX(for size: CGSize) -> CGFloat {
+        if size.height > size.width {
+            return -min(size.width * 0.12, 110)
+        }
+
+        return -min(size.width * 0.04, 60)
     }
 }
 
