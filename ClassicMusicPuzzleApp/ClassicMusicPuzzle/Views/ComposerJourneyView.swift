@@ -40,28 +40,20 @@ struct ComposerJourneyView: View {
                             }
                         }
                     }
-                    .gesture(
-                        DragGesture(minimumDistance: 40)
-                            .onEnded { value in
-                                if value.translation.width < -60 {
-                                    moveComposer(by: 1)
-                                } else if value.translation.width > 60 {
-                                    moveComposer(by: -1)
-                                }
-                            }
-                    )
                     .toolbar {
                         ToolbarItem(placement: .topBarLeading) {
-                            Button(player.isPlaying ? localized("Pause", "暂停") : localized("Play", "播放")) {
-                                player.isPlaying ? player.stop() : player.play(theme: composer.theme)
+                            Button(player.isMuted ? localized("Unmute", "取消静音") : localized("Mute", "静音")) {
+                                player.toggleMute()
                             }
                         }
                         ToolbarItemGroup(placement: .topBarTrailing) {
                             Button {
-                                endListening()
+                                toggleLanguage()
                             } label: {
-                                Label(localized("End Listening", "结束聆听"), systemImage: "xmark.circle")
+                                Text(language == .english ? "中文" : "EN")
+                                    .font(.headline.weight(.bold))
                             }
+                            .accessibilityLabel(Text(localized("Switch to Chinese", "切换到英文")))
 
                             Menu {
                                 Button {
@@ -91,13 +83,6 @@ struct ComposerJourneyView: View {
                                     }
                                 }
 
-                                Menu(language.displayName) {
-                                    ForEach(AppLanguage.allCases) { item in
-                                        Button(item.displayName) {
-                                            languageRawValue = item.rawValue
-                                        }
-                                    }
-                                }
                             } label: {
                                 Image(systemName: "ellipsis.circle")
                             }
@@ -136,17 +121,6 @@ struct ComposerJourneyView: View {
         player.play(theme: composer.theme)
     }
 
-    private func endListening() {
-        player.stop()
-        isAssistantPresented = false
-        isReflectionPresented = false
-        isAboutPresented = false
-        withAnimation(.easeInOut(duration: 0.24)) {
-            isIntroVisible = true
-        }
-        scheduleIntroDismissal()
-    }
-
     private func scheduleIntroDismissal() {
         introDismissTask?.cancel()
         introDismissTask = Task {
@@ -159,6 +133,10 @@ struct ComposerJourneyView: View {
                 }
             }
         }
+    }
+
+    private func toggleLanguage() {
+        languageRawValue = language == .english ? AppLanguage.simplifiedChinese.rawValue : AppLanguage.english.rawValue
     }
 
     @ViewBuilder
@@ -208,6 +186,15 @@ private struct LaunchArtworkView: View {
             Image("LaunchArtwork")
                 .resizable()
                 .scaledToFill()
+                .blur(radius: 22)
+                .opacity(0.46)
+                .ignoresSafeArea()
+
+            Image("LaunchArtwork")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                .shadow(color: .black.opacity(0.55), radius: 28, y: 10)
                 .ignoresSafeArea()
 
             LinearGradient(
@@ -1045,10 +1032,6 @@ private struct ImmersivePoemView: View {
                 }
                 .padding(.vertical, 8)
 
-                Text(localized("Swipe to drift into another composer.", "左右滑动，进入另一位音乐家的世界。"))
-                    .font((layout.isCompact ? Font.caption : Font.footnote).weight(.medium))
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(.secondary)
             }
             .padding(layout.isCompact ? 18 : 24)
             .frame(maxWidth: .infinity, minHeight: layout.poemMinHeight, alignment: .top)

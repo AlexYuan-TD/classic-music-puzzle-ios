@@ -3,6 +3,7 @@ import Foundation
 
 final class ThemePlayer: ObservableObject {
     @Published private(set) var isPlaying = false
+    @Published private(set) var isMuted = false
 
     private let engine = AVAudioEngine()
     private var sourceNode: AVAudioSourceNode!
@@ -68,6 +69,7 @@ final class ThemePlayer: ObservableObject {
                 if !engine.isRunning {
                     try engine.start()
                 }
+                engine.mainMixerNode.outputVolume = isMuted ? 0 : 1
             } catch {
                 await MainActor.run {
                     self.isPlaying = false
@@ -92,6 +94,12 @@ final class ThemePlayer: ObservableObject {
         playbackTask = nil
         setFrequency(0)
         isPlaying = false
+    }
+
+    @MainActor
+    func toggleMute() {
+        isMuted.toggle()
+        engine.mainMixerNode.outputVolume = isMuted ? 0 : 1
     }
 
     private func setFrequency(_ frequency: Double) {

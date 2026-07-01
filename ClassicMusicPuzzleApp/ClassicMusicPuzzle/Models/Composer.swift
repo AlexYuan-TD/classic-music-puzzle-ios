@@ -78,7 +78,7 @@ extension Composer {
         ThemeNote(frequency: 246.94, beats: 1.0), ThemeNote(frequency: 220.00, beats: 1.0)
     ]
 
-    static let catalog: [Composer] = [
+    private static let allCatalog: [Composer] = [
         Composer(
             id: "beethoven",
             name: LocalizedCopy(english: "Ludwig van Beethoven", simplifiedChinese: "路德维希·范·贝多芬"),
@@ -501,4 +501,8 @@ extension Composer {
             theme: MusicalTheme(title: LocalizedCopy(english: "Gymnopedie contour", simplifiedChinese: "吉诺佩蒂轮廓"), tempo: 60, notes: lyricalMotif)
         )
     ]
+
+    static let catalog: [Composer] = allCatalog.filter {
+        !["beethoven", "mozart", "bach", "chopin"].contains($0.id)
+    }
 }
